@@ -6,7 +6,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Title from './Title';
 
-// Generate Employee Data
+// Generate Employees Data
 function createData(id, status, name, address, birthDate, position) {
   return { id, status, name, address, birthDate, position };
 }
@@ -54,11 +54,11 @@ export default function EmployeesList() {
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell>Status</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Address</TableCell>
-            <TableCell>Birth Date</TableCell>
-            <TableCell align="right">Position</TableCell>
+            <TableCell style={{fontWeight:"bold"}}>Status</TableCell>
+            <TableCell style={{fontWeight:"bold"}}>Name</TableCell>
+            <TableCell style={{fontWeight:"bold"}}>Address</TableCell>
+            <TableCell style={{fontWeight:"bold"}}>Birth Date</TableCell>
+            <TableCell style={{fontWeight:"bold"}} align="right">Position</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

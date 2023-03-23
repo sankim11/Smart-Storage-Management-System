@@ -6,7 +6,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Title from './Title';
 
-// Generate Employee Data
+// Generate Suppliers Data
 function createData(id, orderId, name, company, status, orderDate) {
   return { id, orderId, name, company, status, orderDate };
 }
@@ -57,15 +57,15 @@ const rows = [
 export default function SupplierList() {
   return (
     <React.Fragment>
-      <Title>Employees</Title>
+      <Title>Suppliers</Title>
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell>Order ID</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Company</TableCell>
-            <TableCell>Order Status</TableCell>
-            <TableCell align="right">Order Date</TableCell>
+            <TableCell style={{fontWeight:"bold"}}>Order ID</TableCell>
+            <TableCell style={{fontWeight:"bold"}}>Name</TableCell>
+            <TableCell style={{fontWeight:"bold"}}>Company</TableCell>
+            <TableCell style={{fontWeight:"bold"}}>Order Status</TableCell>
+            <TableCell style={{fontWeight:"bold"}} align="right">Order Date</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

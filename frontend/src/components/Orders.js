@@ -6,7 +6,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Title from './Title';
 
-// Generate Order Data
+// Generate Orders Data
 function createData(id, date, name, shipTo, paymentMethod, amount) {
   return { id, date, name, shipTo, paymentMethod, amount };
 }
@@ -54,11 +54,11 @@ export default function Orders() {
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell>Date</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Ship To</TableCell>
-            <TableCell>Payment Method</TableCell>
-            <TableCell align="right">Sale Amount</TableCell>
+            <TableCell style={{fontWeight:"bold"}}>Date</TableCell>
+            <TableCell style={{fontWeight:"bold"}}>Name</TableCell>
+            <TableCell style={{fontWeight:"bold"}}>Ship To</TableCell>
+            <TableCell style={{fontWeight:"bold"}}>Payment Method</TableCell>
+            <TableCell style={{fontWeight:"bold"}} align="right">Sale Amount</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

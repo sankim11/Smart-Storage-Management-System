@@ -6,7 +6,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Title from './Title';
 
-// Generate Employee Data
+// Generate Reports Data
 function createData(id, reportId, name, date, link) {
   return { id, reportId, name, date, link };
 }
@@ -56,10 +56,10 @@ export default function ReportsList() {
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell>Report ID</TableCell>
-            <TableCell>Report Name</TableCell>
-            <TableCell>Report Date</TableCell>
-            <TableCell align="right">Link</TableCell>
+            <TableCell style={{fontWeight:"bold"}}>Report ID</TableCell>
+            <TableCell style={{fontWeight:"bold"}}>Report Name</TableCell>
+            <TableCell style={{fontWeight:"bold"}}>Report Date</TableCell>
+            <TableCell style={{fontWeight:"bold"}} align="right">Link</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

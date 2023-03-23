@@ -6,7 +6,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Title from './Title';
 
-// Generate Employee Data
+// Generate Storage Data
 function createData(id, itemId, name, price, expiryDate) {
   return { id, itemId, name, price, expiryDate };
 }
@@ -56,10 +56,10 @@ export default function StorageItems() {
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell>Item ID</TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Price</TableCell>
-            <TableCell align="right">Expiry Date</TableCell>
+            <TableCell style={{fontWeight:"bold"}}>Item ID</TableCell>
+            <TableCell style={{fontWeight:"bold"}}>Name</TableCell>
+            <TableCell style={{fontWeight:"bold"}}>Price</TableCell>
+            <TableCell style={{fontWeight:"bold"}} align="right">Expiry Date</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
