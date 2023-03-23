@@ -13,7 +13,6 @@ import { mainListItems, secondaryListItems } from '../components/listItems';
 import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
-import StoreIcon from '@mui/icons-material/Store';
 
 const drawerWidth = 240;
 
@@ -98,9 +97,8 @@ export default function NavBar() {
             <Link to={"/dashboard"} style={{ color: 'inherit', textDecoration: 'none' }}>
                 SMS075
             </Link>
-              
             </Typography>
-            <Button variant="contained" color='error' href='/login' sx={{ fontStyle: "oblique", mr: 1 }}>
+            <Button variant="contained" color='error' href='/' sx={{ fontStyle: "oblique", mr: 1 }}>
               <LogoutIcon style={{ color: 'white' }}></LogoutIcon>
             </Button>
           </Toolbar>
