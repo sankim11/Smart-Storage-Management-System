@@ -1,6 +1,6 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Homepage from './pages/Homepage';
+import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Storage from './pages/Storage';
 import Orders from './pages/Orders';
@@ -13,7 +13,7 @@ function App() {
     <div className='App'>
       <Router>
         <Routes>
-          <Route path="/" element={<Homepage/>} />
+          <Route path="/" element={<Login/>} />
           <Route path="/dashboard" element={<Dashboard/>} />
           <Route path="/storage" element={<Storage/>} />
           <Route path="/orders" element={<Orders/>} />
