@@ -16,7 +16,7 @@ import imgSrc from "../media/cloud-back.jpg"
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © SMS075 '}
+      {"Copyright © L'Alveare "}
       {new Date().getFullYear()}
       {'.'}
     </Typography>

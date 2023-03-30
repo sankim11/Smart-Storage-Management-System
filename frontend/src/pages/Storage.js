@@ -9,6 +9,8 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import StorageItems from "../components/StorageItems";
 import NavBar from "../components/NavBar";
+import SideDrawer from '../components/SideDrawer';
+import { useState } from 'react';
 
 function Copyright(props) {
   return (
@@ -18,7 +20,7 @@ function Copyright(props) {
       align="center"
       {...props}
     >
-      {"Copyright © SMS075 "}
+      {"Copyright © L'Alveare "}
       {new Date().getFullYear()}
       {"."}
     </Typography>
@@ -27,12 +29,23 @@ function Copyright(props) {
 
 const mdTheme = createTheme();
 
-function DashboardContent() {
+const StoragePage = () => {
+  const [open, setOpen] = useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        <NavBar />
+        <NavBar open={open} openDrawer={handleDrawerOpen}></NavBar>
+        <SideDrawer open={open} closeDrawer={handleDrawerClose}></SideDrawer>
         <Box
           component="main"
           sx={{
@@ -63,6 +76,4 @@ function DashboardContent() {
   );
 }
 
-export default function Dashboard() {
-  return <DashboardContent />;
-}
+export default StoragePage;
