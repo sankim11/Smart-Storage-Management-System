@@ -35,20 +35,9 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function Login() {
-  const [emp, setEmp] = React.useState(true);
   const [selectedValue, setSelectedValue] = React.useState("Employee");
 
-  const handleEmployee = () => {
-    setEmp(true);
-  };
-
-  const handleCustomer = () => {
-    setEmp(false);
-  };
-
   const handleChange = (event) => {
-    if (event.target.value === "Customer") handleCustomer();
-    if (event.target.value === "Employee") handleEmployee();
     setSelectedValue(event.target.value);
   };
 
@@ -125,7 +114,7 @@ export default function Login() {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign in
+              Sign up
             </Typography>
             <Box
               component="form"
@@ -159,11 +148,32 @@ export default function Login() {
                 margin="normal"
                 required
                 fullWidth
+                name="firstName"
+                label="Full Name"
+                id="fullName"
+                autoComplete="given-name"
+                sx={{
+                  backgroundColor: "#ecddc5",
+                  borderRadius: 1,
+                  "& label.Mui-focused": {
+                    color: "black",
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#D6A556",
+                    },
+                  },
+                }}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
                 name="password"
                 label="Password"
                 type="password"
                 id="password"
-                autoComplete="current-password"
+                autoComplete="new-password"
                 sx={{
                   backgroundColor: "#ecddc5",
                   borderRadius: 1,
@@ -182,6 +192,7 @@ export default function Login() {
                 aria-labelledby="customer-type"
                 defaultValue="Employee"
                 name="customer-type"
+                sx={{}}
               >
                 <FormControlLabel
                   value="Employee"
@@ -225,17 +236,13 @@ export default function Login() {
                     backgroundColor: "#D6A556",
                   },
                 }}
-                href={emp ? "/dashboard" : "/homepage"}
+                href="/"
               >
-                Sign In
+                Sign Up
               </Button>
               <Grid item>
-                <Link
-                  href="/signup"
-                  variant="body2"
-                  style={{ color: "inherit" }}
-                >
-                  {"Don't have an account? Sign Up"}
+                <Link href="/" variant="body2" style={{ color: "inherit" }}>
+                  {"Already have an account?"}
                 </Link>
               </Grid>
               <Copyright sx={{ mt: 5 }} />

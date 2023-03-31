@@ -30,7 +30,7 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-export default function NavBar({ open, openDrawer }) {
+export default function NavBarC({ open, openDrawer }) {
     return (
         <AppBar position="absolute" open={open} sx={{backgroundColor: '#E0BB7F'}}>
           <Toolbar sx={{ pr: '24px' }}>
@@ -55,7 +55,7 @@ export default function NavBar({ open, openDrawer }) {
               noWrap
               sx={{ flexGrow: 1, textAlign: 'center' }}
             >
-            <Link to={"/dashboard"} style={{ color: 'inherit', textDecoration: 'none' }}>
+            <Link to={"/homepage"} style={{ color: 'inherit', textDecoration: 'none' }}>
                 L'Alveare <HiveIcon />
             </Link>
             </Typography>

@@ -4,12 +4,9 @@ import MuiDrawer from '@mui/material/Drawer';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import PeopleIcon from '@mui/icons-material/People';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import LayersIcon from '@mui/icons-material/Layers';
-import WarehouseIcon from '@mui/icons-material/Warehouse';
+import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
+import LocalMallIcon from '@mui/icons-material/LocalMall';
 import { Link } from 'react-router-dom';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
@@ -46,7 +43,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-function SideDrawer({ open, closeDrawer }) {
+function SideDrawerC({ open, closeDrawer }) {
   return (
     <Drawer variant="permanent" open={open}>
       <Toolbar
@@ -63,52 +60,28 @@ function SideDrawer({ open, closeDrawer }) {
       </Toolbar>
       <Divider />
       <List component="nav">
-      <Link to={"/dashboard"} style={{ color: 'inherit', textDecoration: 'none' }}>
+      <Link to={"/homepage"} style={{ color: 'inherit', textDecoration: 'none' }}>
       <ListItemButton>
         <ListItemIcon>
-          <DashboardIcon />
+          <DashboardCustomizeIcon />
         </ListItemIcon>
         <ListItemText primary="Dashboard" />
       </ListItemButton>
     </Link>
-    <Link to={"/storage"} style={{ color: 'inherit', textDecoration: 'none' }}>
-      <ListItemButton>
-        <ListItemIcon>
-          <WarehouseIcon />
-        </ListItemIcon>
-        <ListItemText primary="Storage" />
-      </ListItemButton>
-    </Link>
-    <Link to={"/orders"} style={{ color: 'inherit', textDecoration: 'none' }}>
+    <Link to={"/cart"} style={{ color: 'inherit', textDecoration: 'none' }}>
     <ListItemButton>
       <ListItemIcon>
         <ShoppingCartIcon />
       </ListItemIcon>
-      <ListItemText primary="Orders" />
+      <ListItemText primary="My Cart" />
     </ListItemButton>
     </Link>
-    <Link to={"/employees"} style={{ color: 'inherit', textDecoration: 'none' }}>
+    <Link to={"/myorder"} style={{ color: 'inherit', textDecoration: 'none' }}>
     <ListItemButton>
       <ListItemIcon>
-        <PeopleIcon />
+        <LocalMallIcon />
       </ListItemIcon>
-      <ListItemText primary="Employees" />
-    </ListItemButton>
-    </Link>
-    <Link to={"/reports"} style={{ color: 'inherit', textDecoration: 'none' }}>
-    <ListItemButton>
-      <ListItemIcon>
-        <BarChartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Reports" />
-    </ListItemButton>
-    </Link>
-    <Link to={"/suppliers"} style={{ color: 'inherit', textDecoration: 'none' }}>
-    <ListItemButton>
-      <ListItemIcon>
-        <LayersIcon />
-      </ListItemIcon>
-      <ListItemText primary="Suppliers" />
+      <ListItemText primary="My Orders" />
     </ListItemButton>
     </Link>
       </List>
@@ -116,4 +89,4 @@ function SideDrawer({ open, closeDrawer }) {
   )
 }
 
-export default SideDrawer;
+export default SideDrawerC;
