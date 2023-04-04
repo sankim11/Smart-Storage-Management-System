@@ -18,6 +18,6 @@ app.get("/hello", (req, res) => {
     res.json("yo")
 })
 
-app.listen(3000, () => {
+app.listen(4000, () => {
     console.log("backend initiated!")
 })
