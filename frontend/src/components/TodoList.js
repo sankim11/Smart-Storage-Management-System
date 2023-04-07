@@ -5,6 +5,7 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Title from './Title';
+import { useState, useEffect } from 'react';
 
 // Generate Orders Data
 function createData(id, task, priority) {
@@ -26,6 +27,20 @@ const rows = [
 ];
 
 export default function TodoList() {
+  const [post, setPost] = useState([]);
+
+  useEffect(() =>  {
+    fetch('http://localhost:4000/employee', { mode: 'no-cors' })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setPost(data);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  }, []);
+
   return (
     <React.Fragment>
       <Title>To do List</Title>
@@ -39,7 +54,12 @@ export default function TodoList() {
         <TableBody>
           {rows.map((row) => (
             <TableRow key={row.id}>
-              <TableCell>{row.task}</TableCell>
+              <TableCell>{row.task} {post.map((book => (
+                <div className='book'>
+                  {book.email}
+                </div>
+              )
+              ))}</TableCell>
               <TableCell align="right">{row.priority}</TableCell>
             </TableRow>
           ))}

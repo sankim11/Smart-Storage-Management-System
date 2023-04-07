@@ -5,70 +5,46 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Title from './Title';
-
-// Generate Orders Data
-function createData(id, date, name, shipTo, paymentMethod, amount) {
-  return { id, date, name, shipTo, paymentMethod, amount };
-}
-
-const rows = [
-  createData(
-    0,
-    '16 Mar, 2019',
-    'Elvis Presley',
-    'Tupelo, MS',
-    'VISA ⠀•••• 3719',
-    312.44,
-  ),
-  createData(
-    1,
-    '16 Mar, 2019',
-    'Paul McCartney',
-    'London, UK',
-    'VISA ⠀•••• 2574',
-    866.99,
-  ),
-  createData(2, '16 Mar, 2019', 'Tom Scholz', 'Boston, MA', 'MC ⠀•••• 1253', 100.81),
-  createData(
-    3,
-    '16 Mar, 2019',
-    'Michael Jackson',
-    'Gary, IN',
-    'AMEX ⠀•••• 2000',
-    654.39,
-  ),
-  createData(
-    4,
-    '15 Mar, 2019',
-    'Bruce Springsteen',
-    'Long Branch, NJ',
-    'VISA ⠀•••• 5919',
-    212.79,
-  ),
-];
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+import moment from 'moment';
 
 export default function Orders() {
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/orders');
+        setOrders(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <React.Fragment>
       <Title>Recent Orders</Title>
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell style={{fontWeight:"bold"}}>Date</TableCell>
-            <TableCell style={{fontWeight:"bold"}}>Name</TableCell>
-            <TableCell style={{fontWeight:"bold"}}>Ship To</TableCell>
-            <TableCell style={{fontWeight:"bold"}}>Payment Method</TableCell>
-            <TableCell style={{fontWeight:"bold"}} align="right">Sale Amount</TableCell>
+            <TableCell style={{fontWeight:"bold"}}>Cart ID</TableCell>
+            <TableCell style={{fontWeight:"bold"}}>Client Name</TableCell>
+            <TableCell style={{fontWeight:"bold"}}>Client Email</TableCell>
+            <TableCell style={{fontWeight:"bold"}}>Date Sold</TableCell>
+            <TableCell style={{fontWeight:"bold"}} align="right">Time Sold</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.date}</TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.shipTo}</TableCell>
-              <TableCell>{row.paymentMethod}</TableCell>
-              <TableCell align="right">{`$${row.amount}`}</TableCell>
+          {orders.map((order) => (
+            <TableRow key={order.id}>
+              <TableCell>{order.CartID}</TableCell>
+              <TableCell>{order.FirstName} {order.LastName}</TableCell>
+              <TableCell>{order.ClientEmail}</TableCell>
+              <TableCell>{new Date(order.DateSold).toLocaleDateString()}</TableCell>
+              <TableCell align="right">{moment(order.TimeSold, 'HH:mm:ss').format('h:mm A')}</TableCell>
             </TableRow>
           ))}
         </TableBody>

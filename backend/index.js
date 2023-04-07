@@ -1,22 +1,78 @@
 import express from "express"
-import mysql from "mysql"
+import mysql from "mysql2"
+import cors from "cors";
 
-const app = express()
+const app = express();
+app.use(cors());
 
 const port = 4000
 const db = mysql.createConnection({
     host:"localhost",
-    user:"saianeesh",
-    password:"cpsc441",
-    database:"StorageSystem"
+    user:"root",
+    password:"password",
+    database:"storagesystem",
 })
 
-app.get("/", (req, res) => {
-    res.json([{"test":"hello this is the backend!"}])
-})
+const pool = mysql.createPool({
+    host: "localhost",
+    user: "root",
+    password: "password",
+    database: "storagesystem",
+  });
+
+app.post('/login', async (req, res) => {
+    const { Email, PasswordE, emp } = req.body;
+    const [rows] = await pool.query('SELECT * FROM employee WHERE Email = ? AND PasswordE = ?', [Email, PasswordE]);
+    if (rows.length === 1) {
+        req.session.userId = rows[0].id;
+        res.json({ userType: emp ? 'employee' : 'customer' });
+      } else {
+        res.status(401).json({ error: 'Invalid email or password' });
+      }
+});
 
 app.get("/employees", (req, res) => {
     const q = "SELECT * FROM employee"
+    db.query(q, (err,data) => {
+        if(err) return res.json(err)
+        return res.json(data)
+    })
+})
+
+app.get("/storage", (req, res) => {
+    const q = "SELECT DISTINCT mainstorage.*, item.*, COALESCE(edible.expiry, 'N/A') as expiry FROM mainstorage JOIN Item ON mainstorage.ItemID = Item.ItemID LEFT JOIN edible ON mainstorage.ItemID = edible.ItemID"
+    db.query(q, (err,data) => {
+        if(err) return res.json(err)
+        return res.json(data)
+    })
+})
+
+app.get("/orders", (req, res) => {
+    const q = "SELECT cart.*, customer.* FROM cart JOIN customer ON cart.ClientEmail = customer.ClientEmail"
+    db.query(q, (err,data) => {
+        if(err) return res.json(err)
+        return res.json(data)
+    })
+})
+
+app.get("/reports", (req, res) => {
+    const q = "SELECT * FROM report"
+    db.query(q, (err,data) => {
+        if(err) return res.json(err)
+        return res.json(data)
+    })
+})
+
+app.get("/suppliers", (req, res) => {
+    const q = "SELECT * FROM supplier"
+    db.query(q, (err,data) => {
+        if(err) return res.json(err)
+        return res.json(data)
+    })
+})
+
+app.get("/items", (req, res) => {
+    const q = "SELECT DISTINCT mainstorage.*, item.* FROM mainstorage JOIN Item ON mainstorage.ItemID = Item.ItemID"
     db.query(q, (err,data) => {
         if(err) return res.json(err)
         return res.json(data)

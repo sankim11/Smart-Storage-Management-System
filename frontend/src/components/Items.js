@@ -5,70 +5,47 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Title from './Title';
-
-// Generate Storage Data
-function createData(id, itemId, name, price, expiryDate) {
-  return { id, itemId, name, price, expiryDate };
-}
-
-const rows = [
-  createData(
-    0,
-    '10',
-    'Shoes',
-    13.99,
-    'March 22, 2023',
-  ),
-  createData(
-    1,
-    '1',
-    'Chain',
-    99.99,
-    'March 22, 2023',
-  ),
-  createData(
-    2,
-    '2',
-    'Ring',
-    101.25,
-    'March 22, 2023'
-  ),
-  createData(
-    3,
-    '3',
-    'Jersey',
-    85.99,
-    'March 22, 2023',
-  ),
-  createData(
-    4,
-    '4',
-    'Bottle',
-    23.70,
-    'March 22, 2023',
-  ),
-];
+import AddIcon from '@mui/icons-material/Add';
+import { Button } from '@mui/material';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 export default function Items() {
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/items');
+        setItems(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <React.Fragment>
       <Title>Items</Title>
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell style={{fontWeight:"bold"}}>Item ID</TableCell>
-            <TableCell style={{fontWeight:"bold"}}>Name</TableCell>
-            <TableCell style={{fontWeight:"bold"}}>Price</TableCell>
-            <TableCell style={{fontWeight:"bold"}} align="right">Expiry Date</TableCell>
+            <TableCell style={{fontWeight:"bold", width: '25%' }}>Name</TableCell>
+            <TableCell style={{fontWeight:"bold", width: '25%' }}>Price</TableCell>
+            <TableCell style={{fontWeight:"bold", width: '25%' }}>Category</TableCell>
+            <TableCell style={{fontWeight:"bold", width: '25%' }} align="right">Add to Cart</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.itemId}</TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.price}</TableCell>
-              <TableCell align="right">{row.expiryDate}</TableCell>
+          {items.map((item) => (
+            <TableRow key={item.id}>
+              <TableCell>{item.ItemName}</TableCell>
+              <TableCell>{item.Price}</TableCell>
+              <TableCell>{item.Category}</TableCell>
+              <TableCell align="right">
+                <Button style={{ color: '#D6A556' }}><AddIcon></AddIcon></Button>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

@@ -5,70 +5,41 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Title from './Title';
-
-// Generate Employees Data
-function createData(id, status, name, address, birthDate, position) {
-  return { id, status, name, address, birthDate, position };
-}
-
-const rows = [
-  createData(
-    0,
-    'Active',
-    'Elvis Presley',
-    'Tupelo, MS',
-    'Oct 2, 1998',
-    'Manager',
-  ),
-  createData(
-    1,
-    'Active',
-    'Paul McCartney',
-    'London, UK',
-    'Jul 2, 1998',
-    'Employee',
-  ),
-  createData(2, 'Active', 'Tom Scholz', 'Boston, MA', 'Jan 2, 1998', 'Employee'),
-  createData(
-    3,
-    'Active',
-    'Michael Jackson',
-    'Gary, IN',
-    'Oct 22, 1998',
-    'Employee',
-  ),
-  createData(
-    4,
-    'Active',
-    'Bruce Springsteen',
-    'Long Branch, NJ',
-    'Nov 7, 1998',
-    'Employee',
-  ),
-];
+import axios from 'axios';
+import { useState, useEffect } from 'react';
 
 export default function EmployeesList() {
+  const [emps, setEmps] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/employees');
+        setEmps(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <React.Fragment>
       <Title>Employees</Title>
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell style={{fontWeight:"bold"}}>Status</TableCell>
-            <TableCell style={{fontWeight:"bold"}}>Name</TableCell>
-            <TableCell style={{fontWeight:"bold"}}>Address</TableCell>
-            <TableCell style={{fontWeight:"bold"}}>Birth Date</TableCell>
-            <TableCell style={{fontWeight:"bold"}} align="right">Position</TableCell>
+            <TableCell style={{fontWeight:"bold"}}>Email</TableCell>
+            <TableCell style={{fontWeight:"bold"}}>First Name</TableCell>
+            <TableCell style={{fontWeight:"bold"}} align="right">Last Name</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.status}</TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.address}</TableCell>
-              <TableCell>{row.birthDate}</TableCell>
-              <TableCell align="right">{row.position}</TableCell>
+          {emps.map((emp) => (
+            <TableRow key={emp.id}>
+              <TableCell>{emp.Email}</TableCell>
+              <TableCell>{emp.FirstName}</TableCell>
+              <TableCell align="right">{emp.LastName}</TableCell>
             </TableRow>
           ))}
         </TableBody>

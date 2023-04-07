@@ -60,13 +60,25 @@ export default function Login() {
     inputProps: { "aria-label": item },
   });
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
+    const response = await fetch('http://localhost:4000/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: data.get('email'),
+        password: data.get('password'),
+        emp: emp,
+      }),
     });
+    if (response.ok) {
+      // Redirect to the appropriate page based on user type
+      const { userType } = await response.json();
+      window.location.href = emp ? '/dashboard' : '/homepage';
+    } else {
+      // Show error message
+    }
   };
 
   return (
@@ -225,17 +237,25 @@ export default function Login() {
                     backgroundColor: "#D6A556",
                   },
                 }}
-                href={emp ? "/dashboard" : "/homepage"}
               >
                 Sign In
               </Button>
               <Grid item>
                 <Link
-                  href="/signup"
+                  href="/signupemp"
                   variant="body2"
                   style={{ color: "inherit" }}
                 >
-                  {"Don't have an account? Sign Up"}
+                  {"Don't have an account? Sign Up as Employee"}
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link
+                  href="/signupcus"
+                  variant="body2"
+                  style={{ color: "inherit" }}
+                >
+                  {"Don't have an account? Sign Up as Customer"}
                 </Link>
               </Grid>
               <Copyright sx={{ mt: 5 }} />
