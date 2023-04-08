@@ -25,19 +25,32 @@ const pool = mysql.createPool({
     database: "storagesystem",
   });
 
-app.post('/login', async (req, res) => {
-    const { Email, PasswordE, emp } = req.body;
-    const [rows] = await pool.query('SELECT * FROM employee WHERE Email = ? AND PasswordE = ?', [Email, PasswordE]);
-    if (rows.length === 1) {
-        req.session.userId = rows[0].id;
-        res.json({ userType: emp ? 'employee' : 'customer' });
-      } else {
-        res.status(401).json({ error: 'Invalid email or password' });
-      }
-});
+// app.post('/login', async (req, res) => {
+//     const { Email, PasswordE, emp } = req.body;
+//     const [rows] = await pool.query('SELECT * FROM employee WHERE Email = ? AND PasswordE = ?', [Email, PasswordE]);
+//     if (rows.length === 1) {
+//         req.session.userId = rows[0].id;
+//         res.json({ userType: emp ? 'employee' : 'customer' });
+//       } else {
+//         res.status(401).json({ error: 'Invalid email or password' });
+//       }
+// });
+
+//add new users for emp and cust
+//update items when order placed
+//update storage, make new cart
+
 
 app.get("/employees", (req, res) => {
     const q = "SELECT * FROM employee"
+    db.query(q, (err,data) => {
+        if(err) return res.json(err)
+        return res.json(data)
+    })
+})
+
+app.get("/customers", (req, res) => {
+    const q = "SELECT * FROM customer"
     db.query(q, (err,data) => {
         if(err) return res.json(err)
         return res.json(data)
