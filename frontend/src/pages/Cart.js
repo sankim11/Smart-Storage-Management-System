@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import MyCart from '../components/MyCart';
+import Cart from '../components/Cart';
 import NavBar from '../components/CustomersNavBar';
 import SideDrawer from '../components/CustomersSideDrawer';
 import { useState } from 'react';
@@ -59,7 +59,7 @@ const DashboardCustomersPage = () => {
               {/* Recent Items */}
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  <MyCart />
+                  <Cart />
                 </Paper>
               </Grid>
             </Grid>
