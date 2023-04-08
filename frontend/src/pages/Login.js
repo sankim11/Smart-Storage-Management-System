@@ -43,6 +43,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [emps, setEmps] = React.useState([]);
   const [cust, setCust] = React.useState([]);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -97,7 +98,7 @@ export default function Login() {
       if (user) {
         window.location.href = "/dashboard";
       } else {
-        // Show error message
+        setError('Invalid email or password.');
       }
     }
     if(!emp) {
@@ -105,7 +106,7 @@ export default function Login() {
       if (user) {
         window.location.href = "/homepage";
       } else {
-        // Show error message
+        setError('Invalid email or password.');
       }  
     }
   }
@@ -174,6 +175,7 @@ export default function Login() {
               onSubmit={handleSubmit}
               sx={{ mt: 1, ml: 8, mr: 8 }}
             >
+              {error && <p>{error}</p>}
               <TextField
                 margin="normal"
                 required
