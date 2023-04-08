@@ -43,7 +43,7 @@ export default function Items() {
           {items.map((item, index) => (
             <TableRow key={`${item.ItemID}-${index}`}>
               <TableCell>{item.ItemName}</TableCell>
-              <TableCell>{item.Price}</TableCell>
+              <TableCell>${item.Price}</TableCell>
               <TableCell>{item.Category}</TableCell>
               <TableCell>{item.AmountStored}</TableCell>
               <TableCell align="right">
