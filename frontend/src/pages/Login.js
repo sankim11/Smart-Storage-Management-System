@@ -16,8 +16,10 @@ import CardHeader from "@mui/material/CardHeader";
 import HiveIcon from "@mui/icons-material/Hive";
 import { Radio, RadioGroup } from "@mui/material";
 import Link from "@mui/material/Link";
-import axios from 'axios';
-import { useState, useEffect } from 'react';
+import axios from "axios";
+import { useState, useEffect } from "react";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 function Copyright(props) {
   return (
@@ -43,12 +45,13 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [emps, setEmps] = React.useState([]);
   const [cust, setCust] = React.useState([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/employees');
+        const response = await axios.get("http://localhost:4000/employees");
         setEmps(response.data);
       } catch (error) {
         console.error(error);
@@ -60,7 +63,7 @@ export default function Login() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/customers');
+        const response = await axios.get("http://localhost:4000/customers");
         setCust(response.data);
       } catch (error) {
         console.error(error);
@@ -93,23 +96,38 @@ export default function Login() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if(emp) {
-      const user = emps.find((employee) => employee.Email === email && employee.PasswordE === password);
+    if (emp) {
+      const user = emps.find(
+        (employee) =>
+          employee.Email === email && employee.PasswordE === password
+      );
       if (user) {
         window.location.href = "/dashboard";
       } else {
-        setError('Invalid email or password.');
+        setError("Invalid email or password.");
+        setSnackbarOpen(true);
       }
     }
-    if(!emp) {
-      const user = cust.find((customer) => customer.ClientEmail === email && customer.ClientPassword === password);
+    if (!emp) {
+      const user = cust.find(
+        (customer) =>
+          customer.ClientEmail === email && customer.ClientPassword === password
+      );
       if (user) {
         window.location.href = "/homepage";
       } else {
-        setError('Invalid email or password.');
-      }  
+        setError("Invalid email or password.");
+        setSnackbarOpen(true);
+      }
     }
-  }
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -175,7 +193,20 @@ export default function Login() {
               onSubmit={handleSubmit}
               sx={{ mt: 1, ml: 8, mr: 8 }}
             >
-              {error && <p>{error}</p>}
+              <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={5000}
+                onClose={handleCloseSnackbar}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+              >
+                <Alert
+                  onClose={handleCloseSnackbar}
+                  severity="error"
+                  sx={{ width: "100%" }}
+                >
+                  {error}
+                </Alert>
+              </Snackbar>
               <TextField
                 margin="normal"
                 required
@@ -211,7 +242,7 @@ export default function Login() {
                 label="Password"
                 type="password"
                 autoComplete="current-password"
-                placeholder="Password" 
+                placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 sx={{
