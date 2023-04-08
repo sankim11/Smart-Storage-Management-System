@@ -7,11 +7,12 @@ import TableRow from '@mui/material/TableRow';
 import Title from './Title';
 import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
-import { useState, useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import axios from 'axios';
+import { CartContext } from './CartContext';
 
 export default function Items() {
-  const [items, setItems] = useState([]);
+  const { items, setItems, addItem } = useContext(CartContext);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,7 +24,7 @@ export default function Items() {
       }
     };
     fetchData();
-  }, []);
+  }, [setItems]);
 
   return (
     <React.Fragment>
@@ -31,20 +32,28 @@ export default function Items() {
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell style={{fontWeight:"bold", width: '25%' }}>Name</TableCell>
-            <TableCell style={{fontWeight:"bold", width: '25%' }}>Price</TableCell>
-            <TableCell style={{fontWeight:"bold", width: '25%' }}>Category</TableCell>
-            <TableCell style={{fontWeight:"bold", width: '25%' }} align="right">Add to Cart</TableCell>
+            <TableCell style={{ fontWeight: 'bold', width: '20%' }}>Name</TableCell>
+            <TableCell style={{ fontWeight: 'bold', width: '20%' }}>Price</TableCell>
+            <TableCell style={{ fontWeight: 'bold', width: '25%' }}>Category</TableCell>
+            <TableCell style={{ fontWeight: 'bold', width: '20%' }}>On Stock</TableCell>
+            <TableCell style={{ fontWeight: 'bold', width: '10%' }} align="right">Add to Cart</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {items.map((item) => (
-            <TableRow key={item.id}>
+          {items.map((item, index) => (
+            <TableRow key={`${item.ItemID}-${index}`}>
               <TableCell>{item.ItemName}</TableCell>
               <TableCell>{item.Price}</TableCell>
               <TableCell>{item.Category}</TableCell>
+              <TableCell>{item.AmountStored}</TableCell>
               <TableCell align="right">
-                <Button style={{ color: '#D6A556' }}><AddIcon></AddIcon></Button>
+                <Button
+                  style={{ color: '#D6A556' }}
+                  onClick={() => addItem(item)}
+                  disabled={item.AmountStored === 0}
+                >
+                  <AddIcon></AddIcon>
+                </Button>
               </TableCell>
             </TableRow>
           ))}
