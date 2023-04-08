@@ -5,24 +5,39 @@ import cors from "cors";
 const app = express();
 app.use(cors());
 
+const MYSQL_USER = process.env.MYSQL_USER;
+// console.log(MYSQL_USER);
+const MYSQL_PASSWORD = process.env.MYSQL_PASSWORD;
+// console.log(MYSQL_PASSWORD);
+
 const port = 4000
 const db = mysql.createConnection({
     host:"localhost",
-    user:"root",
-    password:"password",
+    user:MYSQL_USER,
+    password:MYSQL_PASSWORD,
     database:"storagesystem",
 })
 
+const pool = mysql.createPool({
+    host: "localhost",
+    user: "root",
+    password: "password",
+    database: "storagesystem",
+  });
+
+app.post('/login', async (req, res) => {
+    const { Email, PasswordE, emp } = req.body;
+    const [rows] = await pool.query('SELECT * FROM employee WHERE Email = ? AND PasswordE = ?', [Email, PasswordE]);
+    if (rows.length === 1) {
+        req.session.userId = rows[0].id;
+        res.json({ userType: emp ? 'employee' : 'customer' });
+      } else {
+        res.status(401).json({ error: 'Invalid email or password' });
+      }
+});
+
 app.get("/employees", (req, res) => {
     const q = "SELECT * FROM employee"
-    db.query(q, (err,data) => {
-        if(err) return res.json(err)
-        return res.json(data)
-    })
-})
-
-app.get("/customers", (req, res) => {
-    const q = "SELECT * FROM customer"
     db.query(q, (err,data) => {
         if(err) return res.json(err)
         return res.json(data)
