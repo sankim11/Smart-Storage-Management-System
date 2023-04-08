@@ -57,29 +57,15 @@ export const CartProvider = ({ children }) => {
     );
   
     if (existingCartItem) {
-      if (existingCartItem.quantity > 1) {
-        setCartItems(
-          cartItems.map((cartItem) =>
-            cartItem.ItemID === item.ItemID
-              ? { ...cartItem, quantity: cartItem.quantity - 1 }
-              : cartItem
-          )
-        );
-        setItems((prevItems) =>
-          prevItems.map((i) =>
-            i.ItemID === item.ItemID ? { ...i, AmountStored: i.AmountStored + 1 } : i
-          )
-        );
-      } else {
-        setCartItems(cartItems.filter((cartItem) => cartItem.ItemID !== item.ItemID));
-        setItems((prevItems) =>
-          prevItems.map((i) =>
-            i.ItemID === item.ItemID ? { ...i, AmountStored: i.AmountStored + 1 } : i
-          )
-        );
-      }
+      setCartItems(cartItems.filter((cartItem) => cartItem.ItemID !== item.ItemID));
+      setItems((prevItems) =>
+        prevItems.map((i) =>
+          i.ItemID === item.ItemID ? { ...i, AmountStored: i.AmountStored + existingCartItem.quantity } : i
+        )
+      );
     }
   };
+  
 
   const setCartItemsHandler = (items) => {
     setCartItems(items);
