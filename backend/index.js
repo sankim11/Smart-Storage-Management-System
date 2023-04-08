@@ -57,6 +57,36 @@ app.get("/customers", (req, res) => {
     })
 })
 
+app.post('/employees/create/:email/:firstName/:lastName/:password', (req, res) => {
+    // const { Email, FirstName, LastName, PasswordE } = req.body;
+    const Email = req.params.email;
+    const FirstName = req.params.firstName;
+    const LastName = req.params.lastName;
+    const PasswordE = req.params.password;
+    db.query('INSERT INTO employee (Email, FirstName, LastName, PasswordE) VALUES (?, ?, ?, ?)', [Email, FirstName, LastName, PasswordE], (error, results, fields) => {
+      if (error) {
+        res.status(500).send(error);
+      } else {
+        res.status(201).send('Employee created successfully');
+      }
+    });
+});
+
+app.post('/customers/create/:email/:firstName/:lastName/:password', (req, res) => {
+    // const { Email, FirstName, LastName, PasswordE } = req.body;
+    const Email = req.params.email;
+    const FirstName = req.params.firstName;
+    const LastName = req.params.lastName;
+    const PasswordC = req.params.password;
+    db.query('INSERT INTO customer (ClientEmail, FirstName, LastName, ClientPassword) VALUES (?, ?, ?, ?)', [Email, FirstName, LastName, PasswordC], (error, results, fields) => {
+      if (error) {
+        res.status(500).send(error);
+      } else {
+        res.status(201).send('Customer created successfully');
+      }
+    });
+});
+
 app.get("/storage", (req, res) => {
     const q = "SELECT DISTINCT mainstorage.*, item.*, COALESCE(edible.expiry, 'N/A') as expiry FROM mainstorage JOIN Item ON mainstorage.ItemID = Item.ItemID LEFT JOIN edible ON mainstorage.ItemID = edible.ItemID"
     db.query(q, (err,data) => {
