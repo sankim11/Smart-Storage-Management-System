@@ -16,6 +16,8 @@ import CardHeader from "@mui/material/CardHeader";
 import HiveIcon from "@mui/icons-material/Hive";
 import { Radio, RadioGroup } from "@mui/material";
 import Link from "@mui/material/Link";
+import axios from 'axios';
+import { useState, useEffect } from 'react';
 
 function Copyright(props) {
   return (
@@ -37,6 +39,34 @@ const theme = createTheme();
 export default function Login() {
   const [emp, setEmp] = React.useState(true);
   const [selectedValue, setSelectedValue] = React.useState("Employee");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = useState("");
+  const [emps, setEmps] = React.useState([]);
+  const [cust, setCust] = React.useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/employees');
+        setEmps(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/customers');
+        setCust(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleEmployee = () => {
     setEmp(true);
@@ -62,24 +92,23 @@ export default function Login() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const response = await fetch('http://localhost:4000/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: data.get('email'),
-        password: data.get('password'),
-        emp: emp,
-      }),
-    });
-    if (response.ok) {
-      // Redirect to the appropriate page based on user type
-      const { userType } = await response.json();
-      window.location.href = emp ? '/dashboard' : '/homepage';
-    } else {
-      // Show error message
+    if(emp) {
+      const user = emps.find((employee) => employee.Email === email && employee.PasswordE === password);
+      if (user) {
+        window.location.href = "/dashboard";
+      } else {
+        // Show error message
+      }
     }
-  };
+    if(!emp) {
+      const user = cust.find((customer) => customer.ClientEmail === email && customer.ClientPassword === password);
+      if (user) {
+        window.location.href = "/homepage";
+      } else {
+        // Show error message
+      }  
+    }
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -154,6 +183,10 @@ export default function Login() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 sx={{
                   backgroundColor: "#ecddc5",
                   borderRadius: 1,
@@ -171,11 +204,14 @@ export default function Login() {
                 margin="normal"
                 required
                 fullWidth
+                id="password"
                 name="password"
                 label="Password"
                 type="password"
-                id="password"
                 autoComplete="current-password"
+                placeholder="Password" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 sx={{
                   backgroundColor: "#ecddc5",
                   borderRadius: 1,
