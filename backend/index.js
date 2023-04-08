@@ -50,8 +50,8 @@ app.get("/employees", (req, res) => {
 })
 
 app.get("/customers", (req, res) => {
-    const q = "SELECT * FROM customer"
-    db.query(q, (err,data) => {
+    const query = "SELECT * FROM customer"
+    db.query(query, (err,data) => {
         if(err) return res.json(err)
         return res.json(data)
     })
