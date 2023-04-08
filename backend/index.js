@@ -5,11 +5,16 @@ import cors from "cors";
 const app = express();
 app.use(cors());
 
+const MYSQL_USER = process.env.MYSQL_USER;
+// console.log(MYSQL_USER);
+const MYSQL_PASSWORD = process.env.MYSQL_PASSWORD;
+// console.log(MYSQL_PASSWORD);
+
 const port = 4000
 const db = mysql.createConnection({
     host:"localhost",
-    user:"root",
-    password:"password",
+    user:MYSQL_USER,
+    password:MYSQL_PASSWORD,
     database:"storagesystem",
 })
 
