@@ -66,7 +66,7 @@ app.get("/storage", (req, res) => {
 })
 
 app.get("/orders", (req, res) => {
-    const q = "SELECT cart.*, customer.* FROM cart JOIN customer ON cart.ClientEmail = customer.ClientEmail"
+    const q = "SELECT cart.*, customer.* FROM cart JOIN customer ON cart.ClientEmail = customer.ClientEmail ORDER BY cart.DateSold DESC"
     db.query(q, (err,data) => {
         if(err) return res.json(err)
         return res.json(data)
