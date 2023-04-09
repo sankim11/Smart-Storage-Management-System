@@ -32,6 +32,7 @@ export default function ReportsList() {
             <TableCell style={{fontWeight:"bold", width: '25%'}}>Report ID</TableCell>
             <TableCell style={{fontWeight:"bold", width: '25%'}}>Cart ID</TableCell>
             <TableCell style={{fontWeight:"bold", width: '25%'}}>Quantity Sold</TableCell>
+            <TableCell style={{fontWeight:"bold", width: '25%'}}>Revenue</TableCell>
             <TableCell style={{fontWeight:"bold", width: '25%'}} align="right">Email</TableCell>
           </TableRow>
         </TableHead>
@@ -41,6 +42,7 @@ export default function ReportsList() {
               <TableCell>{report.ReportID}</TableCell>
               <TableCell>{report.CartID}</TableCell>
               <TableCell>{report.QuantitySold}</TableCell>
+              <TableCell>${report.TotalRevenue}</TableCell>
               <TableCell align="right">{report.Email}</TableCell>
             </TableRow>
           ))}

@@ -73,7 +73,11 @@ app.post('/customers/create/:email/:firstName/:lastName/:password', (req, res) =
 })
 
 app.get("/storage", (req, res) => {
-    const q = "SELECT DISTINCT mainstorage.*, item.*, COALESCE(edible.expiry, 'N/A') as expiry FROM mainstorage JOIN Item ON mainstorage.ItemID = Item.ItemID LEFT JOIN edible ON mainstorage.ItemID = edible.ItemID"
+    const q = `
+      SELECT DISTINCT mainstorage.*, item.*, COALESCE(edible.expiry, 'N/A') as expiry 
+      FROM mainstorage 
+      JOIN Item ON mainstorage.ItemID = Item.ItemID 
+      LEFT JOIN edible ON mainstorage.ItemID = edible.ItemID`
     db.query(q, (err,data) => {
         if(err) return res.json(err)
         return res.json(data)
@@ -85,7 +89,13 @@ app.get("/api/orders", (req, res) => {
   let q;
 
   if (email) {
-    q = "SELECT cart.*, revenue.TotalRevenue FROM cart JOIN customer ON cart.ClientEmail = customer.ClientEmail JOIN (SELECT CartID, SUM(QuantitySold * Price) AS TotalRevenue FROM itemslist JOIN item ON itemslist.ItemID = item.ItemID GROUP BY CartID) revenue ON cart.CartID = revenue.CartID WHERE cart.ClientEmail = ? ORDER BY cart.DateSold DESC";
+    q = `
+      SELECT cart.*, revenue.TotalRevenue 
+      FROM cart JOIN customer ON cart.ClientEmail = customer.ClientEmail 
+      JOIN (SELECT CartID, SUM(QuantitySold * Price) AS TotalRevenue 
+      FROM itemslist JOIN item ON itemslist.ItemID = item.ItemID GROUP BY CartID) revenue ON cart.CartID = revenue.CartID 
+      WHERE cart.ClientEmail = ? 
+      ORDER BY cart.DateSold DESC`;
   } else {
     q = "SELECT cart.*, customer.* FROM cart JOIN customer ON cart.ClientEmail = customer.ClientEmail ORDER BY cart.DateSold DESC";
   }
@@ -97,7 +107,14 @@ app.get("/api/orders", (req, res) => {
 });
 
 app.get("/reports", (req, res) => {
-    const q = "SELECT * FROM report"
+    const q = `
+      SELECT report.*, SUM(item.Price * itemslist.QuantitySold) AS TotalRevenue
+      FROM report
+      INNER JOIN cart ON report.CartID = cart.CartID
+      INNER JOIN itemslist ON cart.CartID = itemslist.CartID
+      INNER JOIN item ON itemslist.ItemID = item.ItemID
+      GROUP BY report.ReportID    
+    `
     db.query(q, (err,data) => {
         if(err) return res.json(err)
         return res.json(data)
@@ -105,7 +122,10 @@ app.get("/reports", (req, res) => {
 })
 
 app.get("/suppliers", (req, res) => {
-    const q = "SELECT DISTINCT supplier.*, item.* FROM supplier INNER JOIN supplieritems ON supplier.SupplierID = supplieritems.SupplierID INNER JOIN item ON supplieritems.ItemID = item.ItemID"
+    const q = `
+      SELECT DISTINCT supplier.*, item.* 
+      FROM supplier INNER JOIN supplieritems ON supplier.SupplierID = supplieritems.SupplierID 
+      INNER JOIN item ON supplieritems.ItemID = item.ItemID`
     db.query(q, (err,data) => {
         if(err) return res.json(err)
         return res.json(data)
@@ -113,12 +133,15 @@ app.get("/suppliers", (req, res) => {
 })
 
 app.get("/items", (req, res) => {
-    const q = "SELECT DISTINCT mainstorage.*, item.ItemName, item.Price, item.Category FROM mainstorage  LEFT JOIN Item ON mainstorage.ItemID = Item.ItemID"
+    const q = `
+      SELECT DISTINCT mainstorage.*, item.ItemName, item.Price, item.Category 
+      FROM mainstorage 
+      LEFT JOIN Item ON mainstorage.ItemID = Item.ItemID`
     db.query(q, (err,data) => {
         if(err) return res.json(err)
         return res.json(data)
     })
-}) 
+})
 
 app.listen(port, () => {
     console.log("backend listening on port", port)
