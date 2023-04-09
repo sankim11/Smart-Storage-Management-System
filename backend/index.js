@@ -89,6 +89,53 @@ app.post('/customers/create/cart/:client_email', (req, res) => {
         });
 })
 
+app.post('/itemslist/add/:cart_id/:item_id/:quantity_sold', (req, res) => {
+    const cartID = parseInt(req.params.cart_id);
+    const itemID = parseInt(req.params.item_id);
+    const quantitySold = parseInt(req.params.quantity_sold);
+    const newRecord = {
+        CartID: cartID,
+        ItemID: itemID,
+        QuantitySold: quantitySold
+    };
+    db.query('INSERT INTO itemslist SET ?', newRecord, (err, data) => {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.status(201).send('Entry added to itemslist successfully');
+        }
+    })
+})
+
+app.put('/storage/update/:cart_id', (req, res) => {
+    const cartId = parseInt(req.params.cart_id);
+    //get where cart id = cartID and then group by item id, then loop through and decrement storage.
+    const q = `UPDATE mainstorage s
+    JOIN (
+        SELECT ItemID, SUM(Quantitysold) AS total_sold
+        FROM itemslist
+        WHERE cartID = ?
+        GROUP BY ItemID
+    ) i ON s.ItemID = i.ItemID 
+    SET s.AmountStored = s.AmountStored - i.total_sold;`;
+    
+    db.query(q, [cartId], (err, data) => {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.status(201).send('Storage updated successfully');
+        }
+    });
+})
+
+// app.get('/rtest/:cart_id', (req, res) => {
+//     const cartID = parseInt(req.params.cart_id);
+//     db.query("SELECT * FROM itemslist WHERE CartID = ?", [cartID], (err,data) => {
+//         if(err) return res.json(err)
+//         return res.json(data)
+//     })
+// })
+
 app.get("/storage", (req, res) => {
     const q = "SELECT DISTINCT mainstorage.*, item.*, COALESCE(edible.expiry, 'N/A') as expiry FROM mainstorage JOIN Item ON mainstorage.ItemID = Item.ItemID LEFT JOIN edible ON mainstorage.ItemID = edible.ItemID"
     db.query(q, (err,data) => {
