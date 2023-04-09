@@ -62,6 +62,33 @@ app.post('/customers/create/:email/:firstName/:lastName/:password', (req, res) =
     });
 })
 
+app.post('/customers/create/cart/:client_email', (req, res) => {
+    const ClientEmail = req.params.client_email;
+    const now = new Date();
+    const currentDate = now.toISOString().slice(0, 10);
+    const currentTime = now.toTimeString().slice(0, 8);
+    db.query('SELECT MAX(CartID) AS max_id FROM cart', (err,data) => {
+        if(err) return res.json(err)
+        const newId = (data[0].max_id) + 1;
+        const newRecord = {
+            CartId: newId,
+            ClientEmail: ClientEmail,
+            DateSold: currentDate,
+            TimeSold: currentTime
+        };
+
+        db.query('INSERT INTO cart SET ?', newRecord, (err1, res2) => {
+            if (err1) {
+                res.status(500).send(err);
+            } else {
+                // res1.status(201).send('Customer created successfully');
+                res.status(201).json([{ "entry_id": newId }]);
+            }
+        });
+            console.log(`New record inserted with CartId ${newId}`);
+        });
+})
+
 app.get("/storage", (req, res) => {
     const q = "SELECT DISTINCT mainstorage.*, item.*, COALESCE(edible.expiry, 'N/A') as expiry FROM mainstorage JOIN Item ON mainstorage.ItemID = Item.ItemID LEFT JOIN edible ON mainstorage.ItemID = edible.ItemID"
     db.query(q, (err,data) => {
