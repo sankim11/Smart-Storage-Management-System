@@ -38,8 +38,8 @@ export default function Orders() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {orders.map((order) => (
-            <TableRow key={order.id}>
+          {orders.map((order, index) => (
+            <TableRow key={`${order.CartID}-${index}`}>
               <TableCell>{order.CartID}</TableCell>
               <TableCell>{order.FirstName} {order.LastName}</TableCell>
               <TableCell>{order.ClientEmail}</TableCell>

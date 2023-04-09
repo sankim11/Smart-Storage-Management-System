@@ -20,6 +20,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
+import { useNavigate } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -38,7 +39,7 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function Login() {
+export default function Login(props) {
   const [emp, setEmp] = React.useState(true);
   const [selectedValue, setSelectedValue] = React.useState("Employee");
   const [email, setEmail] = React.useState("");
@@ -47,6 +48,7 @@ export default function Login() {
   const [cust, setCust] = React.useState([]);
   const [error, setError] = useState("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -96,13 +98,21 @@ export default function Login() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    let selectedUser;
+
     if (emp) {
       const user = emps.find(
         (employee) =>
           employee.Email === email && employee.PasswordE === password
       );
+      selectedUser = emps.find(
+        (employee) =>
+          employee.Email === email && employee.PasswordE === password
+      );
+      
       if (user) {
-        window.location.href = "/dashboard";
+        props.setCurrentUser(selectedUser);
+        navigate("/dashboard");
       } else {
         setError("Invalid email or password.");
         setSnackbarOpen(true);
@@ -113,8 +123,14 @@ export default function Login() {
         (customer) =>
           customer.ClientEmail === email && customer.ClientPassword === password
       );
+      selectedUser = cust.find(
+        (customer) =>
+          customer.Email === email && customer.PasswordE === password
+      );
+
       if (user) {
-        window.location.href = "/homepage";
+        props.setCurrentUser(selectedUser);
+        navigate("/homepage");
       } else {
         setError("Invalid email or password.");
         setSnackbarOpen(true);

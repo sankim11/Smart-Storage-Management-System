@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -7,19 +7,47 @@ import TableRow from '@mui/material/TableRow';
 import Title from './Title';
 import { CartContext } from './CartContext';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Button, MenuItem, Select } from '@mui/material';
+import { Button, MenuItem, Select, TextField } from '@mui/material';
 
 function Cart() {
   const { cartItems, deleteItem, setCartItems } = useContext(CartContext);
+  const [filter, setFilter] = useState("");
+  
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value);
+  };
 
   const subtotal = cartItems.reduce(
     (total, item) => total + item.Price * item.quantity,
     0
   );
 
+  const FilteredCartItems = cartItems.filter((item) =>
+      item.ItemName.toLowerCase().includes(filter.toLowerCase()) ||
+      item.Category.toLowerCase().includes(filter.toLowerCase())
+  );
+
   return (
     <React.Fragment>
       <Title>Cart</Title>
+      <TextField
+        label="Filter by Item Name or Category"
+        variant="outlined"
+        value={filter}
+        onChange={handleFilterChange}
+        style={{ marginBottom: "1rem" }}
+        sx={{
+          borderRadius: 1,
+          "& label.Mui-focused": {
+            color: "black",
+          },
+          "& .MuiOutlinedInput-root": {
+            "&.Mui-focused fieldset": {
+              borderColor: "#D6A556",
+            },
+          },
+        }}
+      />
       <Table size="small">
         <TableHead>
           <TableRow>
@@ -32,7 +60,7 @@ function Cart() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {cartItems.map((item, index) => (
+          {FilteredCartItems.map((item, index) => (
             <TableRow key={`${item.ItemID}-${index}`}>
                 <TableCell>{item.ItemName}</TableCell>
                 <TableCell>${item.Price}</TableCell>

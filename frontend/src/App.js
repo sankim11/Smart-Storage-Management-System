@@ -13,14 +13,17 @@ import CustomerOrder from './pages/CustomerOrder';
 import SignUpEmployee from './pages/SignUpEmployee';
 import SignUpCustomer from './pages/SignUpCustomer';
 import { CartProvider } from './components/CartContext';
+import { useState } from "react";
 
 function App() {
+  const [currentUser, setCurrentUser] = useState(null);
+
   return (
     <div className='App'>
       <Router>
         <CartProvider>
           <Routes>
-            <Route path="/" element={<Login />} />
+            <Route path="/" element={<Login currentUser={currentUser} setCurrentUser={setCurrentUser} />} />
             <Route path="/signupemp" element={<SignUpEmployee />} />
             <Route path="/signupcus" element={<SignUpCustomer />} />
             <Route path="/dashboard" element={<Dashboard />} />
@@ -31,7 +34,7 @@ function App() {
             <Route path="/suppliers" element={<Suppliers />} />
             <Route path="/homepage" element={<CustomersDashboard />} />
             <Route path="/cart" element={<Cart />} />
-            <Route path="/myorder" element={<CustomerOrder />} />
+            <Route path="/myorder" element={<CustomerOrder currentUser={currentUser} />} />
           </Routes>
         </CartProvider>
       </Router>

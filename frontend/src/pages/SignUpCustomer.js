@@ -14,6 +14,9 @@ import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import HiveIcon from "@mui/icons-material/Hive";
 import Link from "@mui/material/Link";
+import axios from "axios";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 function Copyright(props) {
   return (
@@ -33,14 +36,63 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignUpCustomer() {
+  //Email Address
+  const [signUpEmail, setSignUpEmail] = React.useState("");
+  //First Name
+  const [signUpFirstName, setSignUpFirstName] = React.useState("");
+  //Last Name
+  const [signUpLastName, setSignUpLastName] = React.useState("");
+  //Password
+  const [signUpPassword, setSignUpPassword] = React.useState("");
+  //Error Message
+  const [errorMessage, setErrorMessage] = React.useState("");
+  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    if (
+      signUpEmail === "" ||
+      signUpFirstName === "" ||
+      signUpLastName === "" ||
+      signUpPassword === ""
+    ) {
+      setErrorMessage("All fields are required");
+      setSnackbarOpen(true);
+      return;
+    }
+
+    if(signUpPassword.length < 6) {
+      setErrorMessage('Password must be at least 6 characters');
+      setSnackbarOpen(true);
+      return;
+    }
+
+    const url = `http://localhost:4000/customers/create/${signUpEmail}/${signUpFirstName}/${signUpLastName}/${signUpPassword}`;
+
+    axios.post(url)
+      .then((response) => {
+        console.log(response.data);
+        // Redirect to another page or show a success message to the user
+        window.location.href = "/";
+      })
+      .catch((error) => {
+        console.error(error);
+        if (error.response && error.response.status === 409) {
+          // Show an error message if the email already exists
+          setErrorMessage("Email already exists");
+        } else {
+          // Show a generic error message
+          setErrorMessage("An error occurred. Please try again.");
+        }
+        setSnackbarOpen(true);
+      });
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
   };
 
   return (
@@ -107,6 +159,20 @@ export default function SignUpCustomer() {
               onSubmit={handleSubmit}
               sx={{ mt: 1, ml: 8, mr: 8 }}
             >
+              <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={5000}
+                onClose={handleSnackbarClose}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+              >
+                <Alert
+                  onClose={handleSnackbarClose}
+                  severity="error"
+                  sx={{ width: "100%" }}
+                >
+                  {errorMessage}
+                </Alert>
+              </Snackbar>
               <TextField
                 margin="normal"
                 required
@@ -116,6 +182,9 @@ export default function SignUpCustomer() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                onChange={(event) => {
+                  setSignUpEmail(event.target.value);
+                }}
                 sx={{
                   backgroundColor: "#ecddc5",
                   borderRadius: 1,
@@ -137,6 +206,9 @@ export default function SignUpCustomer() {
                 label="First Name"
                 id="firstName"
                 autoComplete="first-name"
+                onChange={(event) => {
+                  setSignUpFirstName(event.target.value);
+                }}
                 sx={{
                   backgroundColor: "#ecddc5",
                   borderRadius: 1,
@@ -158,6 +230,9 @@ export default function SignUpCustomer() {
                 label="Last Name"
                 id="lastName"
                 autoComplete="last-name"
+                onChange={(event) => {
+                  setSignUpLastName(event.target.value);
+                }}
                 sx={{
                   backgroundColor: "#ecddc5",
                   borderRadius: 1,
@@ -180,6 +255,9 @@ export default function SignUpCustomer() {
                 type="password"
                 id="password"
                 autoComplete="new-password"
+                onChange={(event) => {
+                  setSignUpPassword(event.target.value);
+                }}
                 sx={{
                   backgroundColor: "#ecddc5",
                   borderRadius: 1,
@@ -206,7 +284,6 @@ export default function SignUpCustomer() {
                     backgroundColor: "#D6A556",
                   },
                 }}
-                href="/"
               >
                 Sign Up
               </Button>

@@ -14,7 +14,9 @@ import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import HiveIcon from "@mui/icons-material/Hive";
 import Link from "@mui/material/Link";
-import axios from 'axios';
+import axios from "axios";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 function Copyright(props) {
   return (
@@ -35,39 +37,62 @@ const theme = createTheme();
 
 export default function SignUp() {
   //Email Address
-  const [signUpEmail, setSignUpEmail] = React.useState('');
+  const [signUpEmail, setSignUpEmail] = React.useState("");
   //First Name
-  const [signUpFirstName, setSignUpFirstName] = React.useState('');
+  const [signUpFirstName, setSignUpFirstName] = React.useState("");
   //Last Name
-  const [signUpLastName, setSignUpLastName] = React.useState('');
+  const [signUpLastName, setSignUpLastName] = React.useState("");
   //Password
-  const [signUpPassword, setSignUpPassword] = React.useState('');
+  const [signUpPassword, setSignUpPassword] = React.useState("");
+  //Error Message
+  const [errorMessage, setErrorMessage] = React.useState("");
+  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    let signUpInformation = {
-      email: signUpEmail,
-      firstName: signUpFirstName,
-      lastName: signUpLastName,
-      password: signUpPassword,
-    };
-    event.preventDefault();
     if (
-      signUpEmail === '' ||
-      signUpFirstName === '' ||
-      signUpLastName === '' ||
-      signUpPassword === ''
-    )
-  
-    axios.post("http://localhost:4000/addUser", signUpInformation)
-      .then(response => {
+      signUpEmail === "" ||
+      signUpFirstName === "" ||
+      signUpLastName === "" ||
+      signUpPassword === ""
+    ) {
+      setErrorMessage("All fields are required");
+      setSnackbarOpen(true);
+      return;
+    }
+
+    if(signUpPassword.length < 6) {
+      setErrorMessage('Password must be at least 6 characters');
+      setSnackbarOpen(true);
+      return;
+    }
+
+    const url = `http://localhost:4000/employees/create/${signUpEmail}/${signUpFirstName}/${signUpLastName}/${signUpPassword}`;
+
+    axios.post(url)
+      .then((response) => {
         console.log(response.data);
-        // redirect to another page or show a success message to the user
+        // Redirect to another page or show a success message to the user
+        window.location.href = "/";
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
-        // show an error message to the user
+        if (error.response && error.response.status === 409) {
+          // Show an error message if the email already exists
+          setErrorMessage("Email already exists");
+        } else {
+          // Show a generic error message
+          setErrorMessage("An error occurred. Please try again.");
+        }
+        setSnackbarOpen(true);
       });
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
   };
 
   return (
@@ -134,6 +159,20 @@ export default function SignUp() {
               onSubmit={handleSubmit}
               sx={{ mt: 1, ml: 8, mr: 8 }}
             >
+              <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={5000}
+                onClose={handleSnackbarClose}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+              >
+                <Alert
+                  onClose={handleSnackbarClose}
+                  severity="error"
+                  sx={{ width: "100%" }}
+                >
+                  {errorMessage}
+                </Alert>
+              </Snackbar>
               <TextField
                 margin="normal"
                 required
@@ -144,7 +183,7 @@ export default function SignUp() {
                 autoComplete="email"
                 autoFocus
                 onChange={(event) => {
-                  setSignUpEmail(event.target.value)
+                  setSignUpEmail(event.target.value);
                 }}
                 sx={{
                   backgroundColor: "#ecddc5",
@@ -168,7 +207,7 @@ export default function SignUp() {
                 id="firstName"
                 autoComplete="first-name"
                 onChange={(event) => {
-                  setSignUpFirstName(event.target.value)
+                  setSignUpFirstName(event.target.value);
                 }}
                 sx={{
                   backgroundColor: "#ecddc5",
@@ -192,7 +231,7 @@ export default function SignUp() {
                 id="lastName"
                 autoComplete="last-name"
                 onChange={(event) => {
-                  setSignUpLastName(event.target.value)
+                  setSignUpLastName(event.target.value);
                 }}
                 sx={{
                   backgroundColor: "#ecddc5",
@@ -217,7 +256,7 @@ export default function SignUp() {
                 id="password"
                 autoComplete="new-password"
                 onChange={(event) => {
-                  setSignUpPassword(event.target.value)
+                  setSignUpPassword(event.target.value);
                 }}
                 sx={{
                   backgroundColor: "#ecddc5",
@@ -245,7 +284,6 @@ export default function SignUp() {
                     backgroundColor: "#D6A556",
                   },
                 }}
-                href="/"
               >
                 Sign Up
               </Button>

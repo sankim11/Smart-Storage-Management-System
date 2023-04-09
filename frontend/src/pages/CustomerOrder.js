@@ -24,7 +24,7 @@ function Copyright(props) {
 
 const mdTheme = createTheme();
 
-const CustomerOrder = () => {
+const CustomerOrder = ({ currentUser }) => {
   const [open, setOpen] = useState(false);
 
   const handleDrawerOpen = () => {
@@ -59,7 +59,7 @@ const CustomerOrder = () => {
               {/* Recent Items */}
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                  <MyOrders />
+                  <MyOrders currentUser={currentUser} />
                 </Paper>
               </Grid>
             </Grid>
