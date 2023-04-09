@@ -36,8 +36,8 @@ export default function ReportsList() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {reports.map((report) => (
-            <TableRow key={report.id}>
+          {reports.map((report, index) => (
+            <TableRow key={`${report.ReportID}-${index}`}>
               <TableCell>{report.ReportID}</TableCell>
               <TableCell>{report.CartID}</TableCell>
               <TableCell>{report.QuantitySold}</TableCell>

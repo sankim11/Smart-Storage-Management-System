@@ -21,6 +21,7 @@ import { useState, useEffect } from "react";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from '../components/AuthContext';
 
 function Copyright(props) {
   return (
@@ -40,6 +41,7 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function Login(props) {
+  const { setCurrentUser } = useAuth();
   const [emp, setEmp] = React.useState(true);
   const [selectedValue, setSelectedValue] = React.useState("Employee");
   const [email, setEmail] = React.useState("");
@@ -111,7 +113,7 @@ export default function Login(props) {
       );
       
       if (user) {
-        props.setCurrentUser(selectedUser);
+        setCurrentUser(selectedUser);
         navigate("/dashboard");
       } else {
         setError("Invalid email or password.");
@@ -125,11 +127,11 @@ export default function Login(props) {
       );
       selectedUser = cust.find(
         (customer) =>
-          customer.Email === email && customer.PasswordE === password
+          customer.ClientEmail === email && customer.ClientPassword === password
       );
 
       if (user) {
-        props.setCurrentUser(selectedUser);
+        setCurrentUser(selectedUser);
         navigate("/homepage");
       } else {
         setError("Invalid email or password.");

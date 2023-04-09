@@ -80,13 +80,21 @@ app.get("/storage", (req, res) => {
     })
 })
 
-app.get("/orders", (req, res) => {
-    const q = "SELECT cart.*, customer.* FROM cart JOIN customer ON cart.ClientEmail = customer.ClientEmail ORDER BY cart.DateSold DESC"
-    db.query(q, (err,data) => {
-        if(err) return res.json(err)
-        return res.json(data)
-    })
-})
+app.get("/api/orders", (req, res) => {
+  const email = req.query.email;
+  let q;
+
+  if (email) {
+    q = "SELECT cart.*, revenue.TotalRevenue FROM cart JOIN customer ON cart.ClientEmail = customer.ClientEmail JOIN (SELECT CartID, SUM(QuantitySold * Price) AS TotalRevenue FROM itemslist JOIN item ON itemslist.ItemID = item.ItemID GROUP BY CartID) revenue ON cart.CartID = revenue.CartID WHERE cart.ClientEmail = ? ORDER BY cart.DateSold DESC";
+  } else {
+    q = "SELECT cart.*, customer.* FROM cart JOIN customer ON cart.ClientEmail = customer.ClientEmail ORDER BY cart.DateSold DESC";
+  }
+
+  db.query(q, [email], (err, data) => {
+    if (err) return res.json(err);
+    return res.json(data);
+  });
+});
 
 app.get("/reports", (req, res) => {
     const q = "SELECT * FROM report"
@@ -110,57 +118,8 @@ app.get("/items", (req, res) => {
         if(err) return res.json(err)
         return res.json(data)
     })
-})
-
-app.get("/orders", (req, res) => {
-    const email = req.query.email;
-    const q = "SELECT cart.*, customer.* FROM cart JOIN customer ON cart.ClientEmail = customer.ClientEmail WHERE cart.ClientEmail = ? ORDER BY cart.DateSold DESC";
-    db.query(q, [email], (err,data) => {
-        if(err) return res.json(err)
-        return res.json(data)
-    })
-  })  
+}) 
 
 app.listen(port, () => {
     console.log("backend listening on port", port)
 })
-
-app.post("/purchase", (req, res) => {
-    const { purchasedItems } = req.body;
-  
-    const updateMainStorage = (item, index, callback) => {
-      if (index === purchasedItems.length) {
-        return callback();
-      }
-  
-      const { ItemID, quantity } = item;
-  
-      db.query("SELECT * FROM mainstorage WHERE ItemID = ?", [ItemID], (error, results) => {
-        if (error) {
-          return res.status(500).send(error);
-        }
-  
-        if (results.length > 0) {
-          const updatedQuantity = results[0].Quantity + parseInt(quantity);
-          db.query("UPDATE mainstorage SET Quantity = ? WHERE ItemID = ?", [updatedQuantity, ItemID], (error, results) => {
-            if (error) {
-              return res.status(500).send(error);
-            }
-            updateMainStorage(item, index + 1, callback);
-          });
-        } else {
-          db.query("INSERT INTO mainstorage (ItemID, Quantity) VALUES (?, ?)", [ItemID, quantity], (error, results) => {
-            if (error) {
-              return res.status(500).send(error);
-            }
-            updateMainStorage(item, index + 1, callback);
-          });
-        }
-      });
-    };
-  
-    updateMainStorage(purchasedItems, 0, () => {
-      res.status(200).send("Main storage updated successfully");
-    });
-  });
-  

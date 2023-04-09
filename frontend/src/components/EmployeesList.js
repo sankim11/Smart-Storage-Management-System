@@ -35,8 +35,8 @@ export default function EmployeesList() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {emps.map((emp) => (
-            <TableRow key={emp.id}>
+          {emps.map((emp, index) => (
+            <TableRow key={`${emp.Email}-${index}`}>
               <TableCell>{emp.Email}</TableCell>
               <TableCell>{emp.FirstName}</TableCell>
               <TableCell align="right">{emp.LastName}</TableCell>

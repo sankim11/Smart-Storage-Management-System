@@ -6,25 +6,29 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Title from './Title';
 import { useEffect, useState } from 'react';
+import { useAuth } from './AuthContext';
+import moment from 'moment';
 
-export default function Orders({ currentUser }) {
+export default function Orders() {
   const [orders, setOrders] = useState([]);
+  const { currentUser } = useAuth();
 
   useEffect(() => {
     async function fetchOrders() {
       try {
-        const response = await fetch(`/api/orders?email=${currentUser.email}`);
+        const response = await fetch(`http://localhost:4000/api/orders?email=${currentUser.ClientEmail}`);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
         const data = await response.json();
         setOrders(data);
       } catch (error) {
         console.error(error);
       }
-    }    
-
+    }
     if (currentUser) {
       fetchOrders();
     }
-    console.log(currentUser);
   }, [currentUser]);
 
   return (
@@ -33,21 +37,21 @@ export default function Orders({ currentUser }) {
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell style={{fontWeight:"bold"}}>Date</TableCell>
-            <TableCell style={{fontWeight:"bold"}}>Name</TableCell>
-            <TableCell style={{fontWeight:"bold"}}>Ship To</TableCell>
-            <TableCell style={{fontWeight:"bold"}}>Payment Method</TableCell>
-            <TableCell style={{fontWeight:"bold"}} align="right">Sale Amount</TableCell>
+            <TableCell style={{fontWeight:"bold"}}>Cart ID</TableCell>
+            <TableCell style={{fontWeight:"bold"}}>Client Email</TableCell>
+            <TableCell style={{fontWeight:"bold"}}>Date Sold</TableCell>
+            <TableCell style={{fontWeight:"bold"}}>Time Sold</TableCell>
+            <TableCell style={{fontWeight:"bold"}} align="right">Total Price</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {orders.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.date}</TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.shipTo}</TableCell>
-              <TableCell>{row.paymentMethod}</TableCell>
-              <TableCell align="right">{`$${row.amount}`}</TableCell>
+          {orders.map((order, index) => (
+            <TableRow key={`${order.CartID}-${index}`}>
+              <TableCell>{order.CartID}</TableCell>
+              <TableCell>{order.ClientEmail}</TableCell>
+              <TableCell>{new Date(order.DateSold).toLocaleDateString()}</TableCell>
+              <TableCell>{moment(order.TimeSold, 'HH:mm:ss').format('h:mm A')}</TableCell>
+              <TableCell align="right">{`$${order.TotalRevenue}`}</TableCell>
             </TableRow>
           ))}
         </TableBody>
