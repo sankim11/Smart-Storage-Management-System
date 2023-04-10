@@ -12,8 +12,8 @@ const MYSQL_PASSWORD = process.env.MYSQL_PASSWORD;
 const port = 4000;
 const db = mysql.createConnection({
   host: "localhost",
-  user: "root",
-  password: "password",
+  user: MYSQL_USER,
+  password: MYSQL_PASSWORD,
   database: "storagesystem",
 });
 
@@ -33,7 +33,21 @@ app.get("/customers", (req, res) => {
   });
 });
 
-app.post("/employees/create/:email/:firstName/:lastName/:password",
+
+app.get('/storage/warnings', (req, res) => {
+    const q = `
+    SELECT i.ItemID, i.ItemName, s.AmountStored
+    FROM item i
+    INNER JOIN mainstorage s ON i.ItemID = s.ItemID
+    WHERE s.AmountStored < 15`;
+    db.query(q, (err, data) => {
+        if (err) return res.json(err)
+        res.status(200).json(data)
+    })
+})
+
+app.post(
+  "/employees/create/:email/:firstName/:lastName/:password",
   (req, res) => {
     const Email = req.params.email;
     const FirstName = req.params.firstName;
@@ -160,6 +174,44 @@ app.put("/storage/update/:cart_id", (req, res) => {
 //         return res.json(data)
 //     })
 // })
+
+app.post('/report/create/:cart_id', (req, res) => {
+    const cart_id = req.params.cart_id;
+    db.query('SELECT MAX(ReportID) as max_rep FROM report', (err, data) => {
+        if (err) return res.json(err)
+        const report_id = (data[0].max_rep) + 1
+        const q = `
+        INSERT INTO report (ReportID, QuantitySold, CartID)
+        SELECT ?, i.total_sold, i.CartID
+        FROM (
+            SELECT CartID, SUM(Quantitysold) AS total_sold
+            FROM itemslist
+            where CartID = ?
+            group by CartID
+        )i;`
+        db.query(q, [report_id, cart_id], (err1, data2) => {
+            if (err1) {
+                res.status(500).send(err);
+              } else {
+                res.status(201).send('New Report successfully created');
+              }
+        })
+    })
+})
+
+app.put('/storage/purchase/:item_id/:amount_purchased', (req, res) => {
+    const item_id = req.params.item_id;
+    const amount_purchased = req.params.amount_purchased;
+    const q = `
+    UPDATE mainstorage
+    SET AmountStored = AmountStored + ?
+    WHERE ItemID = ?;`;
+    db.query(q, [amount_purchased, item_id], (err, data) => {
+        if (err) return res.status(500).send(err)
+        res.status(201).send('Storage successfully updated')
+    })
+})
+
 
 app.get("/storage", (req, res) => {
   const q = `
