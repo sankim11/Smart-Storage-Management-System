@@ -41,7 +41,7 @@ export default function Items() {
     <React.Fragment>
       <Title>Items</Title>
       <TextField
-        label="Filter by Supplier Name or Item Name"
+        label="Filter by Item Name or Category"
         variant="outlined"
         value={filter}
         onChange={handleFilterChange}

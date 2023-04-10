@@ -60,9 +60,9 @@ export default function StorageItems() {
             <TableCell  style={{fontWeight:"bold", width: '15%'}}>Item ID</TableCell>
             <TableCell style={{fontWeight:"bold", width: '20%'}}>Name</TableCell>
             <TableCell style={{fontWeight:"bold", width: '15%'}}>Price</TableCell>
-            <TableCell style={{fontWeight:"bold", width: '15%'}}>Amount</TableCell>
+            <TableCell style={{fontWeight:"bold", width: '20%'}}>Amount Stored</TableCell>
             <TableCell style={{fontWeight:"bold", width: '15%'}}>Capacity</TableCell>
-            <TableCell style={{fontWeight:"bold", width: '20%'}} align="right">Expiry Date</TableCell>
+            <TableCell style={{fontWeight:"bold", width: '10%'}} align="right">Expiry Date</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

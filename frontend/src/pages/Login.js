@@ -333,7 +333,7 @@ export default function Login(props) {
                   variant="body2"
                   style={{ color: "inherit" }}
                 >
-                  {"Don't have an account? Sign Up as Employee"}
+                  {"Don't have an account? Sign up as an employee"}
                 </Link>
               </Grid>
               <Grid item>
@@ -342,7 +342,7 @@ export default function Login(props) {
                   variant="body2"
                   style={{ color: "inherit" }}
                 >
-                  {"Don't have an account? Sign Up as Customer"}
+                  {"Don't have an account? Sign up as a customer"}
                 </Link>
               </Grid>
               <Copyright sx={{ mt: 5 }} />
