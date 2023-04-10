@@ -61,16 +61,16 @@ export default function Items() {
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell style={{ fontWeight: "bold", width: "20%" }}>
+            <TableCell style={{ fontWeight: "bold", width: "20%", wordBreak: "break-all" }}>
               Name
             </TableCell>
-            <TableCell style={{ fontWeight: "bold", width: "20%" }}>
+            <TableCell style={{ fontWeight: "bold", width: "20%", wordBreak: "break-all" }}>
               Price
             </TableCell>
-            <TableCell style={{ fontWeight: "bold", width: "25%" }}>
+            <TableCell style={{ fontWeight: "bold", width: "25%", wordBreak: "break-all" }}>
               Category
             </TableCell>
-            <TableCell style={{ fontWeight: "bold", width: "20%" }}>
+            <TableCell style={{ fontWeight: "bold", width: "20%", wordBreak: "break-all" }}>
               On Stock
             </TableCell>
             <TableCell

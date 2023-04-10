@@ -97,7 +97,7 @@ export default function SignUp() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Grid container component="main" sx={{ height: "100vh" }}>
+      <Grid container component="main" sx={{ minHeight: "100vh" }}>
         <CssBaseline />
         <Grid
           item
@@ -123,7 +123,6 @@ export default function SignUp() {
           elevation={6}
           square
           sx={{
-            height: "100vh",
             display: "flex",
             flexDirection: "column",
             backgroundColor: "#EAD1A8",
@@ -132,7 +131,7 @@ export default function SignUp() {
           <Card sx={{ borderRadius: "0px", backgroundColor: "#E0BB7F" }}>
             <CardHeader
               title={
-                <Typography variant="h4" sx={{ fontFamily: "unset" }}>
+                <Typography variant="h4" sx={{ fontFamily: "unset", overflowWrap: "break-word" }}>
                   L'Alveare Storage System <HiveIcon></HiveIcon>
                 </Typography>
               }

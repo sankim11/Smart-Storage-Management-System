@@ -32,7 +32,7 @@ export default function ReportsList() {
   };
 
   const filteredEmails = reports.filter((report) =>
-    report.Email.toLowerCase().includes(filter.toLowerCase())
+    report.ClientEmail.toLowerCase().includes(filter.toLowerCase())
   );
 
   const downloadPdf = () => {
@@ -49,7 +49,7 @@ export default function ReportsList() {
       'Cart ID',
       'Quantity Sold',
       'Revenue',
-      'Email',
+      'Client Email',
     ];
   
     const tableRows = filteredEmails.map((report) => [
@@ -107,23 +107,23 @@ export default function ReportsList() {
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell style={{ fontWeight: "bold", width: "25%" }}>
+            <TableCell style={{ fontWeight: "bold", width: "25%", wordBreak: "break-all" }}>
               Report ID
             </TableCell>
-            <TableCell style={{ fontWeight: "bold", width: "25%" }}>
+            <TableCell style={{ fontWeight: "bold", width: "25%", wordBreak: "break-all" }}>
               Cart ID
             </TableCell>
-            <TableCell style={{ fontWeight: "bold", width: "25%" }}>
+            <TableCell style={{ fontWeight: "bold", width: "25%", wordBreak: "break-all" }}>
               Quantity Sold
             </TableCell>
-            <TableCell style={{ fontWeight: "bold", width: "25%" }}>
+            <TableCell style={{ fontWeight: "bold", width: "25%", wordBreak: "break-all" }}>
               Revenue
             </TableCell>
             <TableCell
               style={{ fontWeight: "bold", width: "25%" }}
               align="right"
             >
-              Email
+              Client Email
             </TableCell>
           </TableRow>
         </TableHead>
@@ -134,7 +134,7 @@ export default function ReportsList() {
               <TableCell>{report.CartID}</TableCell>
               <TableCell>{report.QuantitySold}</TableCell>
               <TableCell>${report.TotalRevenue}</TableCell>
-              <TableCell align="right">{report.Email}</TableCell>
+              <TableCell align="right">{report.ClientEmail}</TableCell>
             </TableRow>
           ))}
         </TableBody>

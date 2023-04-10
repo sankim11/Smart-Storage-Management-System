@@ -99,20 +99,14 @@ export default function SupplierList() {
           <TableHead>
             <TableRow>
               <TableCell style={{ fontWeight: "bold" }}>Supplier ID</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>
-                Supplier Name
-              </TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Supplier Name</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Location</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>
-                Transportation Cost
-              </TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Transportation Cost</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Item ID</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Item Name</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Price</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Quantity</TableCell>
-              <TableCell style={{ fontWeight: "bold" }} align="right">
-                Total
-              </TableCell>
+              <TableCell style={{ fontWeight: "bold" }} align="right">Total</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -129,8 +123,16 @@ export default function SupplierList() {
                   <Select
                     value={quantities[index] || 0}
                     onChange={(e) => handleQuantityChange(e, index, supplier)}
+                    MenuProps={{
+                      PaperProps: {
+                        style: {
+                          maxHeight: 200,
+                          overflowY: "auto",
+                        },
+                      },
+                    }}
                   >
-                    {[...Array(11).keys()].map((_, index) => (
+                    {[...Array(51).keys()].map((_, index) => (
                       <MenuItem key={index} value={index}>
                         {index}
                       </MenuItem>
@@ -138,7 +140,7 @@ export default function SupplierList() {
                   </Select>
                 </TableCell>
                 <TableCell align="right">
-                  {(quantities[index] || 0) * supplier.Price}
+                  ${(quantities[index] || 0) * supplier.Price}
                 </TableCell>
               </TableRow>
             ))}
