@@ -228,7 +228,7 @@ app.get("/api/orders", (req, res) => {
 
 app.get("/reports", (req, res) => {
   const q = `
-    SELECT report.*, SUM(item.Price * itemslist.QuantitySold) AS TotalRevenue
+    SELECT report.*, cart.ClientEmail, SUM(item.Price * itemslist.QuantitySold) AS TotalRevenue
     FROM report
     INNER JOIN cart ON report.CartID = cart.CartID
     INNER JOIN itemslist ON cart.CartID = itemslist.CartID

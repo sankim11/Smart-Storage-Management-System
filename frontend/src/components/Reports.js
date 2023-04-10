@@ -32,7 +32,7 @@ export default function ReportsList() {
   };
 
   const filteredEmails = reports.filter((report) =>
-    report.Email.toLowerCase().includes(filter.toLowerCase())
+    report.ClientEmail.toLowerCase().includes(filter.toLowerCase())
   );
 
   const downloadPdf = () => {
@@ -49,7 +49,7 @@ export default function ReportsList() {
       'Cart ID',
       'Quantity Sold',
       'Revenue',
-      'Email',
+      'Client Email',
     ];
   
     const tableRows = filteredEmails.map((report) => [
@@ -123,7 +123,7 @@ export default function ReportsList() {
               style={{ fontWeight: "bold", width: "25%" }}
               align="right"
             >
-              Email
+              Client Email
             </TableCell>
           </TableRow>
         </TableHead>
@@ -134,7 +134,7 @@ export default function ReportsList() {
               <TableCell>{report.CartID}</TableCell>
               <TableCell>{report.QuantitySold}</TableCell>
               <TableCell>${report.TotalRevenue}</TableCell>
-              <TableCell align="right">{report.Email}</TableCell>
+              <TableCell align="right">{report.ClientEmail}</TableCell>
             </TableRow>
           ))}
         </TableBody>
