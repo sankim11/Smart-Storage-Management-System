@@ -11,22 +11,73 @@ import moment from 'moment';
 
 export default function Orders() {
   const [orders, setOrders] = useState([]);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/orders');
+        const response = await axios.get('http://localhost:4000/api/orders', {
+          params: {
+            start_date: startDate,
+            end_date: endDate,
+            start_time: startTime,
+            end_time: endTime,
+          },
+        });
         setOrders(response.data);
       } catch (error) {
         console.error(error);
       }
     };
     fetchData();
-  }, []);
+  }, [startDate, endDate, startTime, endTime]);
 
   return (
     <React.Fragment>
       <Title>Recent Orders</Title>
+      <div style={{ display: 'flex', flexWrap: 'wrap', marginBottom: '1rem' }}>
+        {/* Date inputs */}
+        <label>
+          Start Date:
+          <input
+            type="date"
+            value={startDate || ''}
+            onChange={(e) => setStartDate(e.target.value)}
+            style={{ marginRight: '1rem', marginLeft: '0.5rem' }}
+          />
+        </label>
+        <label>
+          End Date:
+          <input
+            type="date"
+            value={endDate || ''}
+            onChange={(e) => setEndDate(e.target.value)}
+            style={{ marginLeft: '0.5rem' }}
+          />
+        </label>
+        {/* Time inputs */}
+        <label style={{ marginLeft: '1rem' }}>
+          Start Time:
+          <input
+            type="time"
+            value={startTime || ''}
+            onChange={(e) => setStartTime(e.target.value)}
+            style={{ marginRight: '1rem', marginLeft: '0.5rem' }}
+          />
+        </label>
+        <label>
+          End Time:
+          <input
+            type="time"
+            value={endTime || ''}
+            onChange={(e) => setEndTime(e.target.value)}
+            style={{ marginLeft: '0.5rem' }}
+          />
+        </label>
+      </div>
       <Table size="small">
         <TableHead>
           <TableRow>

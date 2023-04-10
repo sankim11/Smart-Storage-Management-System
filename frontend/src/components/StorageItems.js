@@ -7,9 +7,11 @@ import TableRow from '@mui/material/TableRow';
 import Title from './Title';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import { TextField } from "@mui/material";
 
 export default function StorageItems() {
   const [items, setItems] = useState([]);
+  const [filter, setFilter] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,9 +25,35 @@ export default function StorageItems() {
     fetchData();
   }, []);
 
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value);
+  };
+
+  const filteredItems = items.filter((item) =>
+      item.ItemName.toLowerCase().includes(filter.toLowerCase())
+  );
+
   return (
     <React.Fragment>
       <Title>Storage</Title>
+      <TextField
+        label="Filter by Item Name"
+        variant="outlined"
+        value={filter}
+        onChange={handleFilterChange}
+        style={{ marginBottom: "1rem" }}
+        sx={{
+          borderRadius: 1,
+          "& label.Mui-focused": {
+            color: "black",
+          },
+          "& .MuiOutlinedInput-root": {
+            "&.Mui-focused fieldset": {
+              borderColor: "#D6A556",
+            },
+          },
+        }}
+      />
       <Table size="small">
         <TableHead>
           <TableRow>
@@ -38,11 +66,11 @@ export default function StorageItems() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {items.map((item) => (
+          {filteredItems.map((item) => (
             <TableRow key={item.ItemID}>
               <TableCell>{item.ItemID}</TableCell>
               <TableCell>{item.ItemName}</TableCell>
-              <TableCell>{item.Price}</TableCell>
+              <TableCell>${item.Price}</TableCell>
               <TableCell>{item.AmountStored}</TableCell>
               <TableCell>{item.Capacity}</TableCell>
               <TableCell align="right">{item.expiry}</TableCell>

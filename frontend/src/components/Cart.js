@@ -8,10 +8,12 @@ import Title from './Title';
 import { CartContext } from './CartContext';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Button, MenuItem, Select, TextField } from '@mui/material';
+import { useAuth } from './AuthContext';
 
 function Cart() {
   const { cartItems, deleteItem, setCartItems } = useContext(CartContext);
   const [filter, setFilter] = useState("");
+  const { currentUser } = useAuth();
   
   const handleFilterChange = (event) => {
     setFilter(event.target.value);
@@ -26,6 +28,39 @@ function Cart() {
       item.ItemName.toLowerCase().includes(filter.toLowerCase()) ||
       item.Category.toLowerCase().includes(filter.toLowerCase())
   );
+
+  const handleBuy = async () => {
+    try {
+      // Create a new cart
+      const response = await fetch(`/customers/create/cart/${currentUser.ClientEmail}`, {
+        method: "POST",
+      });
+      const data = await response.json();
+      const cartId = data[0].entry_id;
+  
+      // Insert new items bought by this cartId
+      for (const item of cartItems) {
+        await fetch(
+          `/itemslist/add/${cartId}/${item.ItemID}/${item.quantity}`,
+          {
+            method: "POST",
+          }
+        );
+      }
+  
+      // Update the storage
+      await fetch(`/storage/update/${cartId}`, {
+        method: "PUT",
+      });
+  
+      // Clear the cart and show a success message
+      setCartItems([]);
+      alert("Items purchased successfully!");
+    } catch (error) {
+      console.error("Error purchasing items:", error);
+      alert("An error occurred while purchasing items. Please try again.");
+    }
+  };  
 
   return (
     <React.Fragment>
@@ -113,6 +148,7 @@ function Cart() {
                     <Button
                         variant='contained'
                         style={{ color: 'black', backgroundColor: '#D6A556'}}
+                        onClick={handleBuy}
                     >
                         Buy
                     </Button>

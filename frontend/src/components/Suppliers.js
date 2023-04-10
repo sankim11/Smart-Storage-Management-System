@@ -67,7 +67,8 @@ export default function SupplierList() {
 
   const subtotal = itemTotal + transportationTotal;
 
-  const filteredSuppliers = suppliers.filter((supplier) =>
+  const filteredSuppliers = suppliers.filter(
+    (supplier) =>
       supplier.SupplierName.toLowerCase().includes(filter.toLowerCase()) ||
       supplier.ItemName.toLowerCase().includes(filter.toLowerCase())
   );
@@ -93,68 +94,76 @@ export default function SupplierList() {
           },
         }}
       />
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell style={{ fontWeight: "bold" }}>Supplier ID</TableCell>
-            <TableCell style={{ fontWeight: "bold" }}>Supplier Name</TableCell>
-            <TableCell style={{ fontWeight: "bold" }}>Location</TableCell>
-            <TableCell style={{ fontWeight: "bold" }}>
-              Transportation Cost
-            </TableCell>
-            <TableCell style={{ fontWeight: "bold" }}>Item ID</TableCell>
-            <TableCell style={{ fontWeight: "bold" }}>Item Name</TableCell>
-            <TableCell style={{ fontWeight: "bold" }}>Price</TableCell>
-            <TableCell style={{ fontWeight: "bold" }}>Quantity</TableCell>
-            <TableCell style={{ fontWeight: "bold" }} align="right">
-              Total
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {filteredSuppliers.map((supplier, index) => (
-            <TableRow key={`${supplier.SupplierID}-${index}`}>
-              <TableCell>{supplier.SupplierID}</TableCell>
-              <TableCell>{supplier.SupplierName}</TableCell>
-              <TableCell>{supplier.Location}</TableCell>
-              <TableCell>{supplier.TransportationCost}</TableCell>
-              <TableCell>{supplier.ItemID}</TableCell>
-              <TableCell>{supplier.ItemName}</TableCell>
-              <TableCell>{supplier.Price}</TableCell>
-              <TableCell>
-                <Select
-                  value={quantities[index] || 0}
-                  onChange={(e) => handleQuantityChange(e, index, supplier)}
-                >
-                  {[...Array(11).keys()].map((_, index) => (
-                    <MenuItem key={index} value={index}>
-                      {index}
-                    </MenuItem>
-                  ))}
-                </Select>
+      <div style={{ display: "flex", flexDirection: "row" }}>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell style={{ fontWeight: "bold" }}>Supplier ID</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>
+                Supplier Name
               </TableCell>
-              <TableCell align="right">
-                {(quantities[index] || 0) * supplier.Price}
+              <TableCell style={{ fontWeight: "bold" }}>Location</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>
+                Transportation Cost
+              </TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Item ID</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Item Name</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Price</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>Quantity</TableCell>
+              <TableCell style={{ fontWeight: "bold" }} align="right">
+                Total
               </TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-        <TableBody>
-          <TableRow>
-            <TableCell>
-              <Button
-                variant="contained"
-                style={{ color: "black", backgroundColor: "#D6A556" }}
-              >
-                Buy
-              </Button>
-            </TableCell>
-            <TableCell style={{ fontWeight: "bold" }}>
-              Subtotal: ${subtotal}
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
+          </TableHead>
+          <TableBody>
+            {filteredSuppliers.map((supplier, index) => (
+              <TableRow key={`${supplier.SupplierID}-${index}`}>
+                <TableCell>{supplier.SupplierID}</TableCell>
+                <TableCell>{supplier.SupplierName}</TableCell>
+                <TableCell>{supplier.Location}</TableCell>
+                <TableCell>${supplier.TransportationCost}</TableCell>
+                <TableCell>{supplier.ItemID}</TableCell>
+                <TableCell>{supplier.ItemName}</TableCell>
+                <TableCell>${supplier.Price}</TableCell>
+                <TableCell>
+                  <Select
+                    value={quantities[index] || 0}
+                    onChange={(e) => handleQuantityChange(e, index, supplier)}
+                  >
+                    {[...Array(11).keys()].map((_, index) => (
+                      <MenuItem key={index} value={index}>
+                        {index}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </TableCell>
+                <TableCell align="right">
+                  {(quantities[index] || 0) * supplier.Price}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            alignItems: "flex-start",
+            marginLeft: "1rem",
+          }}
+        >
+          <div style={{ marginBottom: "0.5rem", fontWeight: "bold" }}>
+            Subtotal: ${subtotal.toFixed(2)}
+          </div>
+          <Button
+            variant="contained"
+            style={{ color: "black", backgroundColor: "#D6A556" }}
+          >
+            Buy
+          </Button>
+        </div>
+      </div>
     </React.Fragment>
   );
 }
