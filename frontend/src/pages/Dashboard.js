@@ -74,8 +74,7 @@ const DashboardPage = () => {
                   sx={{
                     p: 2,
                     display: "flex",
-                    flexDirection: "column",
-                    height: 240,
+                    flexDirection: "column"
                   }}
                 >
                   <TodoList />

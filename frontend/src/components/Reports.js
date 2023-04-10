@@ -107,16 +107,16 @@ export default function ReportsList() {
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell style={{ fontWeight: "bold", width: "25%" }}>
+            <TableCell style={{ fontWeight: "bold", width: "25%", wordBreak: "break-all" }}>
               Report ID
             </TableCell>
-            <TableCell style={{ fontWeight: "bold", width: "25%" }}>
+            <TableCell style={{ fontWeight: "bold", width: "25%", wordBreak: "break-all" }}>
               Cart ID
             </TableCell>
-            <TableCell style={{ fontWeight: "bold", width: "25%" }}>
+            <TableCell style={{ fontWeight: "bold", width: "25%", wordBreak: "break-all" }}>
               Quantity Sold
             </TableCell>
-            <TableCell style={{ fontWeight: "bold", width: "25%" }}>
+            <TableCell style={{ fontWeight: "bold", width: "25%", wordBreak: "break-all" }}>
               Revenue
             </TableCell>
             <TableCell

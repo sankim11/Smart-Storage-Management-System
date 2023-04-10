@@ -8,31 +8,45 @@ import Title from "./Title";
 import { useState, useEffect } from "react";
 import { TableFooter } from "@mui/material";
 import Link from "@mui/material/Link";
-
-// Generate Orders Data
-function createData(id, task, priority) {
-  return { id, task, priority };
-}
-
-const rows = [
-  createData(0, "Order shirts", "low"),
-  createData(1, "Order shoes", "high", 866.99),
-];
+import axios from "axios";
 
 export default function TodoList() {
-  const [post, setPost] = useState([]);
+  const [todo, setTodo] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:4000/employee", { mode: "no-cors" })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setPost(data);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:4000/todo");
+        setTodo(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
   }, []);
+
+  const getPriority = (amountStored) => {
+    if (amountStored >= 1 && amountStored <= 5) {
+      return "high";
+    } else if (amountStored >= 6 && amountStored <= 10) {
+      return "medium";
+    } else if (amountStored >= 11 && amountStored <= 15) {
+      return "low";
+    }
+  };
+
+  const getPriorityColor = (priority) => {
+    switch (priority) {
+      case "low":
+        return "green";
+      case "medium":
+        return "gold";
+      case "high":
+        return "red";
+      default:
+        return "";
+    }
+  };
 
   return (
     <React.Fragment>
@@ -41,23 +55,23 @@ export default function TodoList() {
         <TableHead>
           <TableRow>
             <TableCell style={{ fontWeight: "bold" }}>Task</TableCell>
-            <TableCell align="right" style={{ fontWeight: "bold" }}>
-              Priority
-            </TableCell>
+            <TableCell align="right" style={{ fontWeight: "bold" }}>Priority</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>
-                {row.task}{" "}
-                {post.map((book) => (
-                  <div className="book">{book.email}</div>
-                ))}
-              </TableCell>
-              <TableCell align="right">{row.priority}</TableCell>
-            </TableRow>
-          ))}
+          {todo.map((task, index) => {
+            const priority = getPriority(task.AmountStored);
+            return (
+              <TableRow key={`${task.ItemID}-${index}`}>
+                <TableCell>
+                  {task.ItemName}
+                </TableCell>
+                <TableCell align="right" style={{ color: getPriorityColor(priority) }}>
+                  {priority}
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
         <TableFooter>
           <TableCell>

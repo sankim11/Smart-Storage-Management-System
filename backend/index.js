@@ -33,8 +33,7 @@ app.get("/customers", (req, res) => {
   });
 });
 
-app.post(
-  "/employees/create/:email/:firstName/:lastName/:password",
+app.post("/employees/create/:email/:firstName/:lastName/:password",
   (req, res) => {
     const Email = req.params.email;
     const FirstName = req.params.firstName;
@@ -67,8 +66,7 @@ app.post(
   }
 );
 
-app.post(
-  "/customers/create/:email/:firstName/:lastName/:password",
+app.post("/customers/create/:email/:firstName/:lastName/:password",
   (req, res) => {
     // const { Email, FirstName, LastName, PasswordE } = req.body;
     const Email = req.params.email;
@@ -259,6 +257,19 @@ app.get("/items", (req, res) => {
     FROM mainstorage 
     LEFT JOIN Item ON mainstorage.ItemID = Item.ItemID`;
   db.query(q, (err, data) => {
+    if (err) return res.json(err);
+    return res.json(data);
+  });
+});
+
+app.get("/todo", (req, res) => {
+  const query = `
+    SELECT DISTINCT mainstorage.*, item.ItemName, item.Price, item.Category 
+    FROM mainstorage 
+    LEFT JOIN Item ON mainstorage.ItemID = Item.ItemID
+    WHERE mainstorage.AmountStored <= ?`;
+
+  db.query(query, [15], (err, data) => {
     if (err) return res.json(err);
     return res.json(data);
   });
