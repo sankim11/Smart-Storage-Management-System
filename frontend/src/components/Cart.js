@@ -9,11 +9,14 @@ import { CartContext } from "./CartContext";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Button, MenuItem, Select, TextField } from "@mui/material";
 import { useAuth } from "./AuthContext";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 function Cart() {
   const { cartItems, deleteItem, setCartItems } = useContext(CartContext);
   const [filter, setFilter] = useState("");
   const { currentUser } = useAuth();
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const handleFilterChange = (event) => {
     setFilter(event.target.value);
@@ -57,13 +60,26 @@ function Cart() {
         method: "PUT",
       });
 
+      // Create a new report for this cartId
+      await fetch(`/report/create/${cartId}`, {
+        method: "POST",
+      });
+
       // Clear the cart and show a success message
       setCartItems([]);
-      alert("Items purchased successfully!");
     } catch (error) {
       console.error("Error purchasing items:", error);
       alert("An error occurred while purchasing items. Please try again.");
     }
+
+    setSnackbarOpen(true);
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
   };
 
   return (
@@ -178,6 +194,20 @@ function Cart() {
           </TableRow>
         </TableBody>
       </Table>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={5000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          Items purchased successfully!
+        </Alert>
+      </Snackbar>
     </React.Fragment>
   );
 }

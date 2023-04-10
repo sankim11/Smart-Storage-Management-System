@@ -33,21 +33,7 @@ app.get("/customers", (req, res) => {
   });
 });
 
-
-app.get('/storage/warnings', (req, res) => {
-    const q = `
-    SELECT i.ItemID, i.ItemName, s.AmountStored
-    FROM item i
-    INNER JOIN mainstorage s ON i.ItemID = s.ItemID
-    WHERE s.AmountStored < 15`;
-    db.query(q, (err, data) => {
-        if (err) return res.json(err)
-        res.status(200).json(data)
-    })
-})
-
-app.post(
-  "/employees/create/:email/:firstName/:lastName/:password",
+app.post("/employees/create/:email/:firstName/:lastName/:password",
   (req, res) => {
     const Email = req.params.email;
     const FirstName = req.params.firstName;
@@ -166,14 +152,6 @@ app.put("/storage/update/:cart_id", (req, res) => {
     }
   });
 });
-
-// app.get('/rtest/:cart_id', (req, res) => {
-//     const cartID = parseInt(req.params.cart_id);
-//     db.query("SELECT * FROM itemslist WHERE CartID = ?", [cartID], (err,data) => {
-//         if(err) return res.json(err)
-//         return res.json(data)
-//     })
-// })
 
 app.post('/report/create/:cart_id', (req, res) => {
     const cart_id = req.params.cart_id;

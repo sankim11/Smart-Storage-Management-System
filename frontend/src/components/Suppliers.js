@@ -8,6 +8,8 @@ import Title from "./Title";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { Button, MenuItem, Select, TextField } from "@mui/material";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 export default function SupplierList() {
   const [suppliers, setSuppliers] = useState([]);
@@ -15,12 +17,16 @@ export default function SupplierList() {
   const [transportationCosts, setTransportationCosts] = useState([]);
   const [supplierUsed, setSupplierUsed] = useState({});
   const [filter, setFilter] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:4000/suppliers");
-        setSuppliers(response.data);
+        const suppliersWithIndex = response.data.map((supplier, index) => {
+          return { ...supplier, originalIndex: index };
+        });
+        setSuppliers(suppliersWithIndex);
         setQuantities(new Array(response.data.length).fill(0));
         setTransportationCosts(new Array(response.data.length).fill(0));
         const initialSupplierUsed = response.data.reduce((acc, supplier) => {
@@ -39,22 +45,56 @@ export default function SupplierList() {
     setFilter(event.target.value);
   };
 
-  const handleQuantityChange = (event, supplierIndex, supplier) => {
+  const handleQuantityChange = (event, originalIndex, supplier) => {
     const newQuantities = [...quantities];
-    newQuantities[supplierIndex] = event.target.value;
+    newQuantities[originalIndex] = event.target.value;
     setQuantities(newQuantities);
     const newTransportationCosts = [...transportationCosts];
     const newSupplierUsed = { ...supplierUsed };
     if (event.target.value > 0 && !supplierUsed[supplier["SupplierID"]]) {
-      newTransportationCosts[supplierIndex] = parseFloat(
+      newTransportationCosts[originalIndex] = parseFloat(
         supplier.TransportationCost
       );
       newSupplierUsed[supplier["SupplierID"]] = true;
     } else {
-      newTransportationCosts[supplierIndex] = 0;
+      newTransportationCosts[originalIndex] = 0;
     }
     setTransportationCosts(newTransportationCosts);
     setSupplierUsed(newSupplierUsed);
+  };
+
+  const handleBuy = async () => {
+    const itemsToUpdate = suppliers.map((supplier, index) => {
+      return {
+        item_id: supplier.ItemID,
+        amount_purchased: quantities[index],
+      };
+    });
+
+    for (const item of itemsToUpdate) {
+      if (item.amount_purchased > 0) {
+        try {
+          const response = await axios.put(
+            `http://localhost:4000/storage/purchase/${item.item_id}/${item.amount_purchased}`
+          );
+          console.log(response.data);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    }
+
+    // Clear the quantities and transportation costs after purchase
+    setQuantities(new Array(suppliers.length).fill(0));
+    setTransportationCosts(new Array(suppliers.length).fill(0));
+    setSnackbarOpen(true);
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
   };
 
   const itemTotal = quantities.reduce((acc, quantity, index) => {
@@ -99,14 +139,20 @@ export default function SupplierList() {
           <TableHead>
             <TableRow>
               <TableCell style={{ fontWeight: "bold" }}>Supplier ID</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Supplier Name</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>
+                Supplier Name
+              </TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Location</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Transportation Cost</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>
+                Transportation Cost
+              </TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Item ID</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Item Name</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Price</TableCell>
               <TableCell style={{ fontWeight: "bold" }}>Quantity</TableCell>
-              <TableCell style={{ fontWeight: "bold" }} align="right">Total</TableCell>
+              <TableCell style={{ fontWeight: "bold" }} align="right">
+                Total
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -121,8 +167,10 @@ export default function SupplierList() {
                 <TableCell>${supplier.Price}</TableCell>
                 <TableCell>
                   <Select
-                    value={quantities[index] || 0}
-                    onChange={(e) => handleQuantityChange(e, index, supplier)}
+                    value={quantities[supplier.originalIndex] || 0}
+                    onChange={(e) =>
+                      handleQuantityChange(e, supplier.originalIndex, supplier)
+                    }
                     MenuProps={{
                       PaperProps: {
                         style: {
@@ -140,7 +188,7 @@ export default function SupplierList() {
                   </Select>
                 </TableCell>
                 <TableCell align="right">
-                  ${(quantities[index] || 0) * supplier.Price}
+                  ${(quantities[supplier.originalIndex] || 0) * supplier.Price}
                 </TableCell>
               </TableRow>
             ))}
@@ -161,11 +209,26 @@ export default function SupplierList() {
           <Button
             variant="contained"
             style={{ color: "black", backgroundColor: "#D6A556" }}
+            onClick={handleBuy}
           >
             Buy
           </Button>
         </div>
       </div>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={5000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          Purchase was successful!
+        </Alert>
+      </Snackbar>
     </React.Fragment>
   );
 }
