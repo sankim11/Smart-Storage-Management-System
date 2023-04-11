@@ -21,8 +21,9 @@ import { useState, useEffect } from "react";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from '../components/AuthContext';
+import { useAuth } from "../components/AuthContext";
 
+// Component to show copyright text
 function Copyright(props) {
   return (
     <Typography
@@ -52,6 +53,7 @@ export default function Login(props) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const navigate = useNavigate();
 
+  // Fetch employees from the API using useEffect hook
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -64,6 +66,7 @@ export default function Login(props) {
     fetchData();
   }, []);
 
+  // Fetch customers from the API using useEffect hook
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -76,20 +79,24 @@ export default function Login(props) {
     fetchData();
   }, []);
 
+  // Function to handle user type selection
   const handleEmployee = () => {
     setEmp(true);
   };
 
+  // Function to handle user type selection
   const handleCustomer = () => {
     setEmp(false);
   };
 
+  // Handle radio button change
   const handleChange = (event) => {
     if (event.target.value === "Customer") handleCustomer();
     if (event.target.value === "Employee") handleEmployee();
     setSelectedValue(event.target.value);
   };
 
+  // Define control props for radio button
   const controlProps = (item) => ({
     checked: selectedValue === item,
     onChange: handleChange,
@@ -98,11 +105,12 @@ export default function Login(props) {
     inputProps: { "aria-label": item },
   });
 
+  // Handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
     let selectedUser;
 
-    if (emp) {
+    if (emp) { // For employees
       const user = emps.find(
         (employee) =>
           employee.Email === email && employee.PasswordE === password
@@ -111,10 +119,10 @@ export default function Login(props) {
         (employee) =>
           employee.Email === email && employee.PasswordE === password
       );
-      
+
       if (user) {
         setCurrentUser(selectedUser);
-        if(selectedUser.isManager) setUserRole("manager");
+        if (selectedUser.isManager) setUserRole("manager"); // Set the user role to manager if employee is a manager
         else setUserRole("employee");
         navigate("/dashboard");
       } else {
@@ -122,7 +130,7 @@ export default function Login(props) {
         setSnackbarOpen(true);
       }
     }
-    if (!emp) {
+    if (!emp) { // For customers
       const user = cust.find(
         (customer) =>
           customer.ClientEmail === email && customer.ClientPassword === password

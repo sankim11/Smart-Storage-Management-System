@@ -40,7 +40,7 @@ const SupplierPage = () => {
   const navigate = useNavigate();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
-  useEffect(() => {
+  useEffect(() => { // check if user is a manager
     if (userRole !== "manager") {
       setSnackbarOpen(true);
       setTimeout(() => {
@@ -49,10 +49,12 @@ const SupplierPage = () => {
     }
   }, [userRole, navigate]);
 
+  // Function to handle opening the drawer
   const handleDrawerOpen = () => {
     setOpen(true);
   };
 
+  // Function to handle closing the drawer
   const handleDrawerClose = () => {
     setOpen(false);
   };

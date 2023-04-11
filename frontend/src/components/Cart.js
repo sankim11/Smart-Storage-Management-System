@@ -12,27 +12,31 @@ import { useAuth } from "./AuthContext";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
-function Cart() {
+export default function Cart() {
   const { cartItems, deleteItem, setCartItems } = useContext(CartContext);
   const [filter, setFilter] = useState("");
   const { currentUser } = useAuth();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
+  // Handler for filter text field
   const handleFilterChange = (event) => {
     setFilter(event.target.value);
   };
 
+  // Calculate subtotal for all items in the cart
   const subtotal = cartItems.reduce(
     (total, item) => total + item.Price * item.quantity,
     0
   );
 
+  // Filter cart items based on search filter
   const FilteredCartItems = cartItems.filter(
     (item) =>
       item.ItemName.toLowerCase().includes(filter.toLowerCase()) ||
       item.Category.toLowerCase().includes(filter.toLowerCase())
   );
 
+  // Handler for buy button click
   const handleBuy = async () => {
     try {
       // Create a new cart
@@ -55,7 +59,7 @@ function Cart() {
         );
       }
 
-      // Update the storage
+      // Update the storage to reflect the purchase
       await fetch(`/storage/update/${cartId}`, {
         method: "PUT",
       });
@@ -71,10 +75,11 @@ function Cart() {
       console.error("Error purchasing items:", error);
       alert("An error occurred while purchasing items. Please try again.");
     }
-
+    // Show snackbar to indicate successful purchase
     setSnackbarOpen(true);
   };
 
+  // Handler for closing the snackbar
   const handleSnackbarClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -211,5 +216,3 @@ function Cart() {
     </React.Fragment>
   );
 }
-
-export default Cart;

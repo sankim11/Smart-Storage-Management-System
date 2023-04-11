@@ -12,6 +12,7 @@ import NavBar from '../components/CustomersNavBar';
 import SideDrawer from '../components/CustomersSideDrawer';
 import { useState } from 'react';
 
+// Component to show copyright text
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -27,10 +28,12 @@ const mdTheme = createTheme();
 const CustomerOrder = ({ currentUser }) => {
   const [open, setOpen] = useState(false);
 
+  // Function to open the side drawer
   const handleDrawerOpen = () => {
     setOpen(true);
   };
 
+  // Function to close the side drawer
   const handleDrawerClose = () => {
     setOpen(false);
   };

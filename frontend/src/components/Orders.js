@@ -16,6 +16,7 @@ export default function Orders() {
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
 
+  // Fetch orders based on filters when any filter variable changes
   useEffect(() => {
     const fetchData = async () => {
       try {

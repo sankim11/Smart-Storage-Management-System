@@ -19,6 +19,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
 const drawerWidth = 240;
 
+// Styling the drawer component
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
     '& .MuiDrawer-paper': {
@@ -46,7 +47,8 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-function SideDrawer({ open, closeDrawer }) {
+// SideDrawer component that takes in props for the open state and closeDrawer function
+export default function SideDrawer({ open, closeDrawer }) {
   return (
     <Drawer variant="permanent" open={open}>
       <Toolbar
@@ -115,5 +117,3 @@ function SideDrawer({ open, closeDrawer }) {
     </Drawer>
   )
 }
-
-export default SideDrawer;

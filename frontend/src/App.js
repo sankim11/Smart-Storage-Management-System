@@ -15,7 +15,7 @@ import SignUpCustomer from "./pages/SignUpCustomer";
 import { CartProvider } from "./components/CartContext";
 import { AuthProvider } from "./components/AuthContext";
 
-function App() {
+function App() { // paths to each page
   return (
     <div className="App">
       <Router>

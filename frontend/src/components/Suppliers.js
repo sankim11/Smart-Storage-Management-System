@@ -12,6 +12,7 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
 export default function SupplierList() {
+  // Set up state variables using useState hook
   const [suppliers, setSuppliers] = useState([]);
   const [quantities, setQuantities] = useState([]);
   const [transportationCosts, setTransportationCosts] = useState([]);
@@ -19,16 +20,21 @@ export default function SupplierList() {
   const [filter, setFilter] = useState("");
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
+  // Use useEffect hook to fetch data from the server when the component mounts
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:4000/suppliers");
+
+        // Add originalIndex property to each supplier object for tracking in state
         const suppliersWithIndex = response.data.map((supplier, index) => {
           return { ...supplier, originalIndex: index };
         });
+
         setSuppliers(suppliersWithIndex);
         setQuantities(new Array(response.data.length).fill(0));
         setTransportationCosts(new Array(response.data.length).fill(0));
+
         const initialSupplierUsed = response.data.reduce((acc, supplier) => {
           acc[supplier.SupplierID] = false;
           return acc;
@@ -41,16 +47,21 @@ export default function SupplierList() {
     fetchData();
   }, []);
 
+  // Event handlers for user input
   const handleFilterChange = (event) => {
     setFilter(event.target.value);
   };
 
   const handleQuantityChange = (event, originalIndex, supplier) => {
     const newQuantities = [...quantities];
+
     newQuantities[originalIndex] = event.target.value;
     setQuantities(newQuantities);
+
     const newTransportationCosts = [...transportationCosts];
     const newSupplierUsed = { ...supplierUsed };
+
+    // Update transportationCosts and supplierUsed arrays based on quantity input
     if (event.target.value > 0 && !supplierUsed[supplier["SupplierID"]]) {
       newTransportationCosts[originalIndex] = parseFloat(
         supplier.TransportationCost
@@ -64,6 +75,7 @@ export default function SupplierList() {
   };
 
   const handleBuy = async () => {
+    // Prepare data to send to server for purchasing
     const itemsToUpdate = suppliers.map((supplier, index) => {
       return {
         item_id: supplier.ItemID,
@@ -71,6 +83,7 @@ export default function SupplierList() {
       };
     });
 
+    // Update server with purchases
     for (const item of itemsToUpdate) {
       if (item.amount_purchased > 0) {
         try {
@@ -90,6 +103,7 @@ export default function SupplierList() {
     setSnackbarOpen(true);
   };
 
+  // Function to handle closing of snackbar
   const handleSnackbarClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -97,16 +111,19 @@ export default function SupplierList() {
     setSnackbarOpen(false);
   };
 
+  // Calculate total cost of all items
   const itemTotal = quantities.reduce((acc, quantity, index) => {
     return acc + quantity * parseFloat(suppliers[index].Price);
   }, 0);
 
+  // Calculate total transportation cost
   const transportationTotal = transportationCosts.reduce((acc, cost) => {
     return acc + cost;
   }, 0);
 
   const subtotal = itemTotal + transportationTotal;
 
+  // Filter suppliers based on user input filter
   const filteredSuppliers = suppliers.filter(
     (supplier) =>
       supplier.SupplierName.toLowerCase().includes(filter.toLowerCase()) ||
@@ -166,6 +183,7 @@ export default function SupplierList() {
                 <TableCell>{supplier.ItemName}</TableCell>
                 <TableCell>${supplier.Price}</TableCell>
                 <TableCell>
+                  {/* Display a select box for user to choose quantity */}
                   <Select
                     value={quantities[supplier.originalIndex] || 0}
                     onChange={(e) =>

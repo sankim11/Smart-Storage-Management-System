@@ -1,23 +1,29 @@
-import * as React from 'react';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import Items from '../components/Items';
-import NavBar from '../components/CustomersNavBar';
-import SideDrawer from '../components/CustomersSideDrawer';
-import { useState } from 'react';
+import * as React from "react";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import Items from "../components/Items";
+import NavBar from "../components/CustomersNavBar";
+import SideDrawer from "../components/CustomersSideDrawer";
+import { useState } from "react";
 
+// Component to show copyright text
 function Copyright(props) {
   return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+    <Typography
+      variant="body2"
+      color="text.secondary"
+      align="center"
+      {...props}
+    >
       {"Copyright © L'Alveare "}
       {new Date().getFullYear()}
-      {'.'}
+      {"."}
     </Typography>
   );
 }
@@ -27,17 +33,19 @@ const mdTheme = createTheme();
 const DashboardCustomersPage = () => {
   const [open, setOpen] = useState(false);
 
+  // Function to open the side drawer
   const handleDrawerOpen = () => {
     setOpen(true);
   };
 
+  // Function to close the side drawer
   const handleDrawerClose = () => {
     setOpen(false);
   };
 
   return (
     <ThemeProvider theme={mdTheme}>
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <NavBar open={open} openDrawer={handleDrawerOpen}></NavBar>
         <SideDrawer open={open} closeDrawer={handleDrawerClose}></SideDrawer>
@@ -45,12 +53,12 @@ const DashboardCustomersPage = () => {
           component="main"
           sx={{
             backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
+              theme.palette.mode === "light"
                 ? theme.palette.grey[100]
                 : theme.palette.grey[900],
             flexGrow: 1,
-            height: '100vh',
-            overflow: 'auto',
+            height: "100vh",
+            overflow: "auto",
           }}
         >
           <Toolbar />
@@ -58,7 +66,7 @@ const DashboardCustomersPage = () => {
             <Grid container spacing={3}>
               {/* Items */}
               <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
                   <Items />
                 </Paper>
               </Grid>

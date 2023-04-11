@@ -12,6 +12,7 @@ import HiveIcon from '@mui/icons-material/Hive';
 
 const drawerWidth = 240;
 
+// Styling the AppBar using styled-component
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({

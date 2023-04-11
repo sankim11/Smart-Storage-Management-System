@@ -14,6 +14,7 @@ import { useState } from 'react';
 
 function Copyright(props) {
   return (
+    // Display the copyright information in the footer
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {"Copyright © L'Alveare "}
       {new Date().getFullYear()}

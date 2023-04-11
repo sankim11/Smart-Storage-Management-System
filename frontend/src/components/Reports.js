@@ -15,6 +15,7 @@ export default function ReportsList() {
   const [reports, setReports] = useState([]);
   const [filter, setFilter] = useState("");
 
+  // Fetch reports data from API when component mounts
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -27,17 +28,21 @@ export default function ReportsList() {
     fetchData();
   }, []);
 
+  // Handle changes to filter input field
   const handleFilterChange = (event) => {
     setFilter(event.target.value);
   };
 
+  // Filter reports based on email input field
   const filteredEmails = reports.filter((report) =>
     report.ClientEmail.toLowerCase().includes(filter.toLowerCase())
   );
 
+  // Download PDF report
   const downloadPdf = () => {
     const doc = new jsPDF();
-  
+    
+    // Add title to report
     const title = "L'Alveare Sales Full Report";
     const titleFontSize = 18;
     doc.setFontSize(titleFontSize);
@@ -45,6 +50,7 @@ export default function ReportsList() {
     const titleX = (doc.internal.pageSize.getWidth() - titleWidth) / 2;
     doc.text(title, titleX, 25);
   
+    // Add title to report
     const tableColumnNames = [
       'Cart ID',
       'Quantity Sold',
@@ -70,6 +76,7 @@ export default function ReportsList() {
       },
     });
   
+    // Add total revenue to report
     const totalRevenue = filteredEmails.reduce((total, report) => total + parseFloat(report.TotalRevenue), 0);
     const totalRevenueText = `Total Revenue: $${totalRevenue.toFixed(2)}`;
     doc.setFont('helvetica', 'normal'); // Set the font and style to match the table
@@ -80,7 +87,7 @@ export default function ReportsList() {
     const lastRowY = doc.autoTable.previous.finalY + 10; // Add some padding
     doc.text(totalRevenueText, totalRevenueX, lastRowY);
   
-    doc.save('reports.pdf');
+    doc.save('reports.pdf'); // Add total revenue to report
   };  
 
   return (

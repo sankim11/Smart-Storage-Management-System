@@ -16,6 +16,7 @@ export default function Items() {
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
+    // Fetch items data from server
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:4000/items");
@@ -28,9 +29,10 @@ export default function Items() {
   }, [setItems]);
 
   const handleFilterChange = (event) => {
-    setFilter(event.target.value);
+    setFilter(event.target.value); // Update filter state with user input
   };
 
+  // Filter items based on item name or category
   const filteredItems = items.filter(
     (item) =>
       item.ItemName.toLowerCase().includes(filter.toLowerCase()) ||

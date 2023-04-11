@@ -13,6 +13,7 @@ import axios from "axios";
 export default function TodoList() {
   const [todo, setTodo] = useState([]);
 
+  // Fetch the to-do items from the backend using
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -25,6 +26,7 @@ export default function TodoList() {
     fetchData();
   }, []);
 
+  // Determine the priority of the to-do item based on the amount stored
   const getPriority = (amountStored) => {
     if (amountStored >= 1 && amountStored <= 5) {
       return "high";
@@ -35,6 +37,7 @@ export default function TodoList() {
     }
   };
 
+  // Determine the color of the priority label based on the priority level
   const getPriorityColor = (priority) => {
     switch (priority) {
       case "low":

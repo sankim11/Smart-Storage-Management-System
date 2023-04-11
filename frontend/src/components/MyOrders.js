@@ -16,6 +16,7 @@ export default function Orders() {
   useEffect(() => {
     async function fetchOrders() {
       try {
+        // Fetch orders from the server using the current user's email
         const response = await fetch(`http://localhost:4000/api/orders?email=${currentUser.ClientEmail}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -27,7 +28,7 @@ export default function Orders() {
       }
     }
     if (currentUser) {
-      fetchOrders();
+      fetchOrders(); // Fetch orders only if currentUser exists
     }
   }, [currentUser]);
 

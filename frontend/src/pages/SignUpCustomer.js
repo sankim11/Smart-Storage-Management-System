@@ -18,6 +18,7 @@ import axios from "axios";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 
+// Component to show copyright text
 function Copyright(props) {
   return (
     <Typography
@@ -36,19 +37,15 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignUpCustomer() {
-  //Email Address
   const [signUpEmail, setSignUpEmail] = React.useState("");
-  //First Name
   const [signUpFirstName, setSignUpFirstName] = React.useState("");
-  //Last Name
   const [signUpLastName, setSignUpLastName] = React.useState("");
-  //Password
   const [signUpPassword, setSignUpPassword] = React.useState("");
-  //Error Message
   const [errorMessage, setErrorMessage] = React.useState("");
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
   const [successMessage, setSuccessMessage] = React.useState("");
 
+  // Function to handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (
@@ -68,10 +65,8 @@ export default function SignUpCustomer() {
       return;
     }
 
-    const url = `http://localhost:4000/customers/create/${signUpEmail}/${signUpFirstName}/${signUpLastName}/${signUpPassword}`;
-
     axios
-      .post(url)
+      .post(`http://localhost:4000/customers/create/${signUpEmail}/${signUpFirstName}/${signUpLastName}/${signUpPassword}`)
       .then((response) => {
         setSuccessMessage("Account created successfully");
         setSnackbarOpen(true);

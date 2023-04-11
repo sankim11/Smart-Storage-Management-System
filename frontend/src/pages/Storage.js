@@ -12,6 +12,7 @@ import NavBar from "../components/NavBar";
 import SideDrawer from '../components/SideDrawer';
 import { useState } from 'react';
 
+// Component to show copyright text
 function Copyright(props) {
   return (
     <Typography
@@ -32,10 +33,12 @@ const mdTheme = createTheme();
 const StoragePage = () => {
   const [open, setOpen] = useState(false);
 
+  // Function to handle opening the drawer
   const handleDrawerOpen = () => {
     setOpen(true);
   };
 
+  // Function to handle closing the drawer
   const handleDrawerClose = () => {
     setOpen(false);
   };

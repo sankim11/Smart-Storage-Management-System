@@ -13,6 +13,7 @@ export default function StorageItems() {
   const [items, setItems] = useState([]);
   const [filter, setFilter] = useState("");
 
+  // Fetch data from server and update state
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -25,10 +26,12 @@ export default function StorageItems() {
     fetchData();
   }, []);
 
+  // Handle changes in filter text field
   const handleFilterChange = (event) => {
     setFilter(event.target.value);
   };
 
+  // Filter items based on filter value
   const filteredItems = items.filter((item) =>
       item.ItemName.toLowerCase().includes(filter.toLowerCase())
   );

@@ -23,6 +23,7 @@ export default function EmployeesList() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Fetch employees from server
         const response = await axios.get("http://localhost:4000/employees");
         setEmps(response.data);
       } catch (error) {
@@ -32,10 +33,12 @@ export default function EmployeesList() {
     fetchData();
   }, []);
 
+  // Handle change of filter value
   const handleFilterChange = (event) => {
     setFilter(event.target.value);
   };
 
+  // Handle deletion of employee
   const handleDeleteEmployee = async (email) => {
     if (userRole === "manager") {
       try {
@@ -60,7 +63,7 @@ export default function EmployeesList() {
     }
     setSnackbarOpen(false);
   };
-
+  // Filter employees based on first or last name
   const filteredEmployees = emps.filter(
     (emp) =>
       emp.FirstName.toLowerCase().includes(filter.toLowerCase()) ||
