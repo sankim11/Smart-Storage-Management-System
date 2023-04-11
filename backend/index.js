@@ -36,12 +36,13 @@ app.get("/customers", (req, res) => {
 });
 
 // Create a new employee
-app.post("/employees/create/:email/:firstName/:lastName/:password",
+app.post("/employees/create/:email/:firstName/:lastName/:password/:emp",
   (req, res) => {
     const Email = req.params.email;
     const FirstName = req.params.firstName;
     const LastName = req.params.lastName;
     const PasswordE = req.params.password;
+    const isManager = req.params.emp;
 
     db.query(
       "SELECT * FROM employee WHERE Email = ?",
@@ -53,8 +54,8 @@ app.post("/employees/create/:email/:firstName/:lastName/:password",
           res.status(409).send("Email already exists");
         } else {
           db.query(
-            "INSERT INTO employee (Email, FirstName, LastName, PasswordE) VALUES (?, ?, ?, ?)",
-            [Email, FirstName, LastName, PasswordE],
+            "INSERT INTO employee (Email, FirstName, LastName, PasswordE, isManager) VALUES (?, ?, ?, ?, ?)",
+            [Email, FirstName, LastName, PasswordE, isManager],
             (error, results, fields) => {
               if (error) {
                 res.status(500).send(error);

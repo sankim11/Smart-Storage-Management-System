@@ -65,9 +65,10 @@ export default function SignUp() {
       setSnackbarOpen(true);
       return;
     }
+    const signUpManager = 0;
 
     // Making a POST request to create the user account
-    axios.post(`http://localhost:4000/employees/create/${signUpEmail}/${signUpFirstName}/${signUpLastName}/${signUpPassword}`)
+    axios.post(`http://localhost:4000/employees/create/${signUpEmail}/${signUpFirstName}/${signUpLastName}/${signUpPassword}/${signUpManager}`)
       .then((response) => {
         setSuccessMessage("Account created successfully");
         setSnackbarOpen(true);
