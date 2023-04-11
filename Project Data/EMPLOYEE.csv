@@ -1,0 +1,6 @@
+Email,FirstName,LastName,PasswordE,isManager
+david@gmail.com,David,Kim,123456,1
+JohnAdams@gmail.com,John,Adams,JohnAdams,1
+JimmyCho@gmail.com,Jimmy,Cho,JimmyCho,0
+SusanLaker@gmail.com,Susan,Laker,SusanLaker,0
+GeorgeStandford@gmail.com,George,Standford,GeorgeStandford,0

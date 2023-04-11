@@ -1,0 +1,86 @@
+CREATE DATABASE StorageSystem;
+USE StorageSystem;
+
+CREATE TABLE Employee (
+  Email VARCHAR(255) PRIMARY KEY,
+  FirstName VARCHAR(255) NOT NULL,
+  LastName VARCHAR(255) NOT NULL,
+  PasswordE VARCHAR(255) NOT NULL,
+  isManager BOOLEAN NOT NULL
+);
+
+CREATE TABLE Item (
+  ItemID INT PRIMARY KEY,
+  ItemName VARCHAR(255) NOT NULL,
+  Price INT NOT NULL,
+  Category VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Supplier (
+  SupplierID INT PRIMARY KEY,
+  SupplierName VARCHAR(255) NOT NULL,
+  Location VARCHAR(255) NOT NULL,
+  TransportationCost INT NOT NULL
+);
+
+CREATE TABLE SupplierItems(
+   SupplierID INT,
+   ItemID INT,
+   FOREIGN KEY (SupplierID) REFERENCES Supplier(SupplierID),
+   FOREIGN KEY (ItemID) REFERENCES Item(ItemID)
+);
+
+CREATE TABLE Manager (
+  ManagerEmail VARCHAR(255),
+  SupplierID INT,
+  FOREIGN KEY (ManagerEmail) REFERENCES Employee(Email),
+  FOREIGN KEY (SupplierID) REFERENCES Supplier(SupplierID)
+);
+
+CREATE TABLE MainStorage (
+  Capacity INT NOT NULL,
+  AmountStored INT NOT NULL,
+  ItemID INT,
+  FOREIGN KEY (ItemID) REFERENCES Item(ItemID)
+);
+
+CREATE TABLE Edible (
+  ItemID INT,
+  Expiry DATE NOT NULL,
+  FOREIGN KEY (ItemID) REFERENCES Item(ItemID)
+);
+
+CREATE TABLE Inedible (
+  ItemID INT,
+  FOREIGN KEY (ItemID) REFERENCES Item(ItemID)
+);
+
+CREATE TABLE Customer (
+  ClientEmail VARCHAR(255) PRIMARY KEY,
+  FirstName VARCHAR(255) NOT NULL,
+  LastName VARCHAR(255) NOT NULL,
+  ClientPassword VARCHAR(255)
+);
+
+CREATE TABLE Cart (
+  CartID INT PRIMARY KEY,
+  ClientEmail VARCHAR(255),
+  DateSold DATE NOT NULL,
+  TimeSold TIME NOT NULL,
+  FOREIGN KEY (ClientEmail) REFERENCES Customer(ClientEmail)
+);
+
+CREATE TABLE ItemsList (
+   CartID INT,
+   ItemID INT,
+   QuantitySold INT NOT NULL,
+   FOREIGN KEY (CartID) REFERENCES Cart(CartID),
+   FOREIGN KEY (ItemID) REFERENCES Item(ItemID)
+);
+
+CREATE TABLE Report (
+  ReportID INT PRIMARY KEY,
+  QuantitySold INT NOT NULL,
+  CartID INT,
+  FOREIGN KEY (CartID) REFERENCES Cart(CartID)
+);

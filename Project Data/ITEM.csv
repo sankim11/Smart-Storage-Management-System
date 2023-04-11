@@ -1,0 +1,51 @@
+ItemID,Name,Price,Category
+1,Apples,7,Produce
+2,Notebook,17,Retail
+3,Headphones,49,Electronics
+4,Pencils,11,Retail
+5,Carrots,8,Produce
+6,Tomatoes,12,Produce
+7,Potatoes,25,Produce
+8,Oranges,28,Produce
+9,Smartphone,550,Electronics
+10,Toothbrush,4,Retail
+11,Laptop,900,Electronics
+12,Spinach,16,Produce
+13,Cucumbers,2,Produce
+14,Tablet,420,Electronics
+15,Broccoli,5,Produce
+16,Smartwatch,250,Electronics
+17,Peppers,6,Produce
+18,Zucchini,26,Produce
+19,Camera,440,Electronics
+20,Bluetooth Speaker,85,Electronics
+21,Strawberries,15,Produce
+22,Kale,18,Produce
+23,Pineapple,30,Produce
+24,Shampoo,15,Retail
+25,Conditioner,21,Retail
+26,Deodorant,10,Retail
+27,Soap,3,Retail
+28,4K TV,930,Electronics
+29,Socks,12,Retail
+30,Bananas,1,Produce
+31,Toothpaste,8,Retail
+32,Wireless Mouse,30,Electronics
+33,Lettuce,7,Produce
+34,Portable Charger,45,Electronics
+35,Gaming Keyboard,98,Electronics
+36,Pears,27,Produce
+37,Grapes,28,Produce
+38,Shower Gel,21,Retail
+39,Cauliflower,25,Produce
+40,Green Beans,22,Produce
+41,External Hard Drive,85,Electronics
+42,Plums,2,Produce
+43,Hand Sanitizer,6,Retail
+44,Monitor,220,Electronics
+45,Gaming Headset,110,Electronics
+46,Cabbage,5,Produce
+47,T-shirt,20,Retail
+48,Pants,45,Retail
+49,Laptop Bag,65,Electronics
+50,Kiwi,3,Produce
