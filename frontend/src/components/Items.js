@@ -6,10 +6,11 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Title from "./Title";
 import AddIcon from "@mui/icons-material/Add";
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, Paper } from "@mui/material";
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { CartContext } from "./CartContext";
+import TableContainer from "@mui/material/TableContainer";
 
 export default function Items() {
   const { items, setItems, addItem } = useContext(CartContext);
@@ -60,49 +61,54 @@ export default function Items() {
           },
         }}
       />
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell style={{ fontWeight: "bold", width: "20%", wordBreak: "break-all" }}>
-              Name
-            </TableCell>
-            <TableCell style={{ fontWeight: "bold", width: "20%", wordBreak: "break-all" }}>
-              Price
-            </TableCell>
-            <TableCell style={{ fontWeight: "bold", width: "25%", wordBreak: "break-all" }}>
-              Category
-            </TableCell>
-            <TableCell style={{ fontWeight: "bold", width: "20%", wordBreak: "break-all" }}>
-              On Stock
-            </TableCell>
-            <TableCell
-              style={{ fontWeight: "bold", width: "10%" }}
-              align="right"
-            >
-              Add to Cart
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {filteredItems.map((item, index) => (
-            <TableRow key={`${item.ItemID}-${index}`}>
-              <TableCell>{item.ItemName}</TableCell>
-              <TableCell>${item.Price}</TableCell>
-              <TableCell>{item.Category}</TableCell>
-              <TableCell>{item.AmountStored}</TableCell>
-              <TableCell align="right">
-                <Button
-                  style={{ color: "#D6A556" }}
-                  onClick={() => addItem(item)}
-                  disabled={item.AmountStored === 0}
-                >
-                  <AddIcon></AddIcon>
-                </Button>
+      <TableContainer
+        component={Paper}
+        sx={{ maxWidth: "100%", overflowX: "auto" }}
+      >
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell style={{ fontWeight: "bold", width: "20%" }}>
+                Name
+              </TableCell>
+              <TableCell style={{ fontWeight: "bold", width: "20%" }}>
+                Price
+              </TableCell>
+              <TableCell style={{ fontWeight: "bold", width: "25%" }}>
+                Category
+              </TableCell>
+              <TableCell style={{ fontWeight: "bold", width: "20%" }}>
+                On Stock
+              </TableCell>
+              <TableCell
+                style={{ fontWeight: "bold", width: "10%" }}
+                align="right"
+              >
+                Add to Cart
               </TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHead>
+          <TableBody>
+            {filteredItems.map((item, index) => (
+              <TableRow key={`${item.ItemID}-${index}`}>
+                <TableCell>{item.ItemName}</TableCell>
+                <TableCell>${item.Price}</TableCell>
+                <TableCell>{item.Category}</TableCell>
+                <TableCell>{item.AmountStored}</TableCell>
+                <TableCell align="right">
+                  <Button
+                    style={{ color: "#D6A556" }}
+                    onClick={() => addItem(item)}
+                    disabled={item.AmountStored === 0}
+                  >
+                    <AddIcon></AddIcon>
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </React.Fragment>
   );
 }

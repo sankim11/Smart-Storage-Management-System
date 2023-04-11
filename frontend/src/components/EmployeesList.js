@@ -7,10 +7,11 @@ import TableRow from "@mui/material/TableRow";
 import Title from "./Title";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Button, TextField, Snackbar } from "@mui/material";
+import { Button, TextField, Snackbar, Paper } from "@mui/material";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import Alert from "@mui/material/Alert";
 import { useAuth } from "../components/AuthContext";
+import TableContainer from "@mui/material/TableContainer";
 
 export default function EmployeesList() {
   const [emps, setEmps] = useState([]);
@@ -91,44 +92,49 @@ export default function EmployeesList() {
           },
         }}
       />
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell style={{ fontWeight: "bold", width: "30%" }}>
-              Email
-            </TableCell>
-            <TableCell style={{ fontWeight: "bold", width: "30%" }}>
-              First Name
-            </TableCell>
-            <TableCell style={{ fontWeight: "bold", width: "30%" }}>
-              Last Name
-            </TableCell>
-            <TableCell
-              style={{ fontWeight: "bold", width: "10%" }}
-              align="right"
-            >
-              Remove
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {filteredEmployees.map((emp, index) => (
-            <TableRow key={`${emp.Email}-${index}`}>
-              <TableCell>{emp.Email}</TableCell>
-              <TableCell>{emp.FirstName}</TableCell>
-              <TableCell>{emp.LastName}</TableCell>
-              <TableCell align="right">
-                <Button
-                  style={{ color: "#D6A556" }}
-                  onClick={() => handleDeleteEmployee(emp.Email)}
-                >
-                  <PersonRemoveIcon></PersonRemoveIcon>
-                </Button>
+      <TableContainer
+        component={Paper}
+        sx={{ maxWidth: "100%", overflowX: "auto" }}
+      >
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell style={{ fontWeight: "bold", width: "30%" }}>
+                Email
+              </TableCell>
+              <TableCell style={{ fontWeight: "bold", width: "30%" }}>
+                First Name
+              </TableCell>
+              <TableCell style={{ fontWeight: "bold", width: "30%" }}>
+                Last Name
+              </TableCell>
+              <TableCell
+                style={{ fontWeight: "bold", width: "10%" }}
+                align="right"
+              >
+                Remove
               </TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHead>
+          <TableBody>
+            {filteredEmployees.map((emp, index) => (
+              <TableRow key={`${emp.Email}-${index}`}>
+                <TableCell>{emp.Email}</TableCell>
+                <TableCell>{emp.FirstName}</TableCell>
+                <TableCell>{emp.LastName}</TableCell>
+                <TableCell align="right">
+                  <Button
+                    style={{ color: "#D6A556" }}
+                    onClick={() => handleDeleteEmployee(emp.Email)}
+                  >
+                    <PersonRemoveIcon></PersonRemoveIcon>
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={5000}

@@ -7,9 +7,10 @@ import TableRow from "@mui/material/TableRow";
 import Title from "./Title";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Button, MenuItem, Select, TextField } from "@mui/material";
+import { Paper, Button, MenuItem, Select, TextField } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
+import TableContainer from "@mui/material/TableContainer";
 
 export default function SupplierList() {
   // Set up state variables using useState hook
@@ -151,7 +152,10 @@ export default function SupplierList() {
           },
         }}
       />
-      <div style={{ display: "flex", flexDirection: "row" }}>
+      <TableContainer
+        component={Paper}
+        sx={{ maxWidth: "100%", overflowX: "auto" }}
+      >
         <Table size="small">
           <TableHead>
             <TableRow>
@@ -232,7 +236,7 @@ export default function SupplierList() {
             Buy
           </Button>
         </div>
-      </div>
+      </TableContainer>
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={5000}

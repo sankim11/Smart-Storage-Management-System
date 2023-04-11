@@ -6,9 +6,10 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Title from "./Title";
 import { useState, useEffect } from "react";
-import { TableFooter } from "@mui/material";
+import { Paper, TableFooter } from "@mui/material";
 import Link from "@mui/material/Link";
 import axios from "axios";
+import TableContainer from "@mui/material/TableContainer";
 
 export default function TodoList() {
   const [todo, setTodo] = useState([]);
@@ -54,43 +55,51 @@ export default function TodoList() {
   return (
     <React.Fragment>
       <Title>To do List</Title>
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell style={{ fontWeight: "bold" }}>Task</TableCell>
-            <TableCell align="right" style={{ fontWeight: "bold" }}>Priority</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {todo.map((task, index) => {
-            const priority = getPriority(task.AmountStored);
-            return (
-              <TableRow key={`${task.ItemID}-${index}`}>
-                <TableCell>
-                  {task.ItemName}
-                </TableCell>
-                <TableCell align="right" style={{ color: getPriorityColor(priority) }}>
-                  {priority}
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TableCell>
-              <Link
-                href="/suppliers"
-                variant="body2"
-                style={{ color: "black", fontStyle: "italic" }}
-                sx={{ fontSize: "0.75rem" }}
-              >
-                Go to Suppliers Items
-              </Link>
-            </TableCell>
-          </TableRow>
-        </TableFooter>
-      </Table>
+      <TableContainer
+        component={Paper}
+        sx={{ maxWidth: "100%", overflowX: "auto" }}
+      >
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell style={{ fontWeight: "bold" }}>Task</TableCell>
+              <TableCell align="right" style={{ fontWeight: "bold" }}>
+                Priority
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {todo.map((task, index) => {
+              const priority = getPriority(task.AmountStored);
+              return (
+                <TableRow key={`${task.ItemID}-${index}`}>
+                  <TableCell>{task.ItemName}</TableCell>
+                  <TableCell
+                    align="right"
+                    style={{ color: getPriorityColor(priority) }}
+                  >
+                    {priority}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TableCell>
+                <Link
+                  href="/suppliers"
+                  variant="body2"
+                  style={{ color: "black", fontStyle: "italic" }}
+                  sx={{ fontSize: "0.75rem" }}
+                >
+                  Go to Suppliers Items
+                </Link>
+              </TableCell>
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </TableContainer>
     </React.Fragment>
   );
 }
