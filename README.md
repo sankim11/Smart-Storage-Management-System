@@ -2,6 +2,9 @@
 
 Run on Windows
 Node.js should be installed
+credentials for a manager:
+Email: david@gmail.com
+Password: 123456
 
 # To Set Up Database
 1. `open database folder`
