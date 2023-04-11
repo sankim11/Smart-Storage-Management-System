@@ -77,16 +77,18 @@ export default function TodoList() {
           })}
         </TableBody>
         <TableFooter>
-          <TableCell>
-            <Link
-              href="/suppliers"
-              variant="body2"
-              style={{ color: "black", fontStyle: "italic" }}
-              sx={{ fontSize: "0.75rem" }}
-            >
-              Go to Suppliers Items
-            </Link>
-          </TableCell>
+          <TableRow>
+            <TableCell>
+              <Link
+                href="/suppliers"
+                variant="body2"
+                style={{ color: "black", fontStyle: "italic" }}
+                sx={{ fontSize: "0.75rem" }}
+              >
+                Go to Suppliers Items
+              </Link>
+            </TableCell>
+          </TableRow>
         </TableFooter>
       </Table>
     </React.Fragment>
