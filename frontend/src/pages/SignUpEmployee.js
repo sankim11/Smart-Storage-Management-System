@@ -47,6 +47,8 @@ export default function SignUp() {
   //Error Message
   const [errorMessage, setErrorMessage] = React.useState("");
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+  const [successMessage, setSuccessMessage] = React.useState("");
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -71,7 +73,11 @@ export default function SignUp() {
 
     axios.post(url)
       .then((response) => {
-        console.log(response.data);
+        setSuccessMessage("Account created successfully");
+        setSnackbarOpen(true);
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 5000);
         // Redirect to another page or show a success message to the user
         window.location.href = "/";
       })
@@ -166,10 +172,10 @@ export default function SignUp() {
               >
                 <Alert
                   onClose={handleSnackbarClose}
-                  severity="error"
+                  severity={errorMessage ? "error" : "success"}
                   sx={{ width: "100%" }}
                 >
-                  {errorMessage}
+                  {errorMessage ? errorMessage : successMessage}
                 </Alert>
               </Snackbar>
               <TextField

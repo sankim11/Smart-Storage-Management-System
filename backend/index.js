@@ -305,6 +305,18 @@ app.get("/todo", (req, res) => {
   });
 });
 
+app.delete("/employees/delete/:email", (req, res) => {
+  const email = req.params.email;
+
+  db.query("DELETE FROM employee WHERE Email = ?", [email], (err, results) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(200).send(`Employee with email ${email} deleted successfully`);
+    }
+  });
+});
+
 app.listen(port, () => {
   console.log("backend listening on port", port);
 });

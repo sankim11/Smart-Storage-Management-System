@@ -47,6 +47,7 @@ export default function SignUpCustomer() {
   //Error Message
   const [errorMessage, setErrorMessage] = React.useState("");
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+  const [successMessage, setSuccessMessage] = React.useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -61,17 +62,22 @@ export default function SignUpCustomer() {
       return;
     }
 
-    if(signUpPassword.length < 6) {
-      setErrorMessage('Password must be at least 6 characters');
+    if (signUpPassword.length < 6) {
+      setErrorMessage("Password must be at least 6 characters");
       setSnackbarOpen(true);
       return;
     }
 
     const url = `http://localhost:4000/customers/create/${signUpEmail}/${signUpFirstName}/${signUpLastName}/${signUpPassword}`;
 
-    axios.post(url)
+    axios
+      .post(url)
       .then((response) => {
-        console.log(response.data);
+        setSuccessMessage("Account created successfully");
+        setSnackbarOpen(true);
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 5000);
         // Redirect to another page or show a success message to the user
         window.location.href = "/";
       })
@@ -131,7 +137,10 @@ export default function SignUpCustomer() {
           <Card sx={{ borderRadius: "0px", backgroundColor: "#E0BB7F" }}>
             <CardHeader
               title={
-                <Typography variant="h4" sx={{ fontFamily: "unset", overflowWrap: "break-word" }}>
+                <Typography
+                  variant="h4"
+                  sx={{ fontFamily: "unset", overflowWrap: "break-word" }}
+                >
                   L'Alveare Storage System <HiveIcon></HiveIcon>
                 </Typography>
               }
@@ -166,10 +175,10 @@ export default function SignUpCustomer() {
               >
                 <Alert
                   onClose={handleSnackbarClose}
-                  severity="error"
+                  severity={errorMessage ? "error" : "success"}
                   sx={{ width: "100%" }}
                 >
-                  {errorMessage}
+                  {errorMessage ? errorMessage : successMessage}
                 </Alert>
               </Snackbar>
               <TextField

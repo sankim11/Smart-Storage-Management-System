@@ -9,8 +9,13 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import SupplierList from "../components/Suppliers";
 import NavBar from "../components/NavBar";
-import SideDrawer from '../components/SideDrawer';
-import { useState } from 'react';
+import SideDrawer from "../components/SideDrawer";
+import { useState } from "react";
+import { useAuth } from "../components/AuthContext";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Snackbar from "@mui/material/Snackbar";
+import { Alert } from "@mui/material";
 
 function Copyright(props) {
   return (
@@ -31,6 +36,18 @@ const mdTheme = createTheme();
 
 const SupplierPage = () => {
   const [open, setOpen] = useState(false);
+  const { userRole } = useAuth();
+  const navigate = useNavigate();
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+
+  useEffect(() => {
+    if (userRole !== "manager") {
+      setSnackbarOpen(true);
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 5000);
+    }
+  }, [userRole, navigate]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -72,8 +89,22 @@ const SupplierPage = () => {
           </Container>
         </Box>
       </Box>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={5000}
+        onClose={() => setSnackbarOpen(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => setSnackbarOpen(false)}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          Only managers can access this page.
+        </Alert>
+      </Snackbar>
     </ThemeProvider>
   );
-}
+};
 
 export default SupplierPage;

@@ -41,7 +41,7 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function Login(props) {
-  const { setCurrentUser } = useAuth();
+  const { setCurrentUser, setUserRole } = useAuth();
   const [emp, setEmp] = React.useState(true);
   const [selectedValue, setSelectedValue] = React.useState("Employee");
   const [email, setEmail] = React.useState("");
@@ -114,6 +114,8 @@ export default function Login(props) {
       
       if (user) {
         setCurrentUser(selectedUser);
+        if(selectedUser.isManager) setUserRole("manager");
+        else setUserRole("employee");
         navigate("/dashboard");
       } else {
         setError("Invalid email or password.");

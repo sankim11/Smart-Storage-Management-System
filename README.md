@@ -1,9 +1,9 @@
 # Smart Storage Management System
 
-# To Run Frontend
-1. `cd frontend`
-2. `npm i`
-3. `npm start`
+# To Set Up Database
+1. `copy and paste the 'Query to create database and tables' in MySQL Workbench and execute`
+2. `in MySQL Workbench, import each table in the order they were created from the 'Project Data' folder (to do so, right click each table on the 'SCHEMAS' and press 'Table Data Import Wizard')`
+3. `copy and paste 'INEDIBLE INSERT' in MySQL Workbench and execute `
 
 # To Run Backend
 1. `cd backend`
@@ -12,5 +12,7 @@
 4. `npm i`
 5. `npm start`
 
-#API Endpoints
-
+# To Run Frontend
+1. `cd frontend`
+2. `npm i`
+3. `npm start`

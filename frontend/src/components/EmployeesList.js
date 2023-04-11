@@ -1,22 +1,29 @@
-import * as React from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Title from './Title';
-import axios from 'axios';
-import { useState, useEffect } from 'react';
-import { TextField } from "@mui/material";
+import * as React from "react";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Title from "./Title";
+import axios from "axios";
+import { useState, useEffect } from "react";
+import { Button, TextField, Snackbar } from "@mui/material";
+import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
+import Alert from "@mui/material/Alert";
+import { useAuth } from "../components/AuthContext";
 
 export default function EmployeesList() {
   const [emps, setEmps] = useState([]);
   const [filter, setFilter] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const [error, setError] = useState("");
+  const { userRole } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/employees');
+        const response = await axios.get("http://localhost:4000/employees");
         setEmps(response.data);
       } catch (error) {
         console.error(error);
@@ -29,7 +36,33 @@ export default function EmployeesList() {
     setFilter(event.target.value);
   };
 
-  const filteredEmployees = emps.filter((emp) =>
+  const handleDeleteEmployee = async (email) => {
+    if (userRole === "manager") {
+      try {
+        await axios.delete(`http://localhost:4000/employees/delete/${email}`);
+        setEmps(emps.filter((emp) => emp.Email !== email));
+        setSnackbarSeverity("success");
+        setError("Employee removed successfully");
+        setSnackbarOpen(true);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      setError("Only managers can perform this action");
+      setSnackbarSeverity("error");
+      setSnackbarOpen(true);
+    }
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
+
+  const filteredEmployees = emps.filter(
+    (emp) =>
       emp.FirstName.toLowerCase().includes(filter.toLowerCase()) ||
       emp.LastName.toLowerCase().includes(filter.toLowerCase())
   );
@@ -58,9 +91,21 @@ export default function EmployeesList() {
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell style={{fontWeight:"bold"}}>Email</TableCell>
-            <TableCell style={{fontWeight:"bold"}}>First Name</TableCell>
-            <TableCell style={{fontWeight:"bold"}} align="right">Last Name</TableCell>
+            <TableCell style={{ fontWeight: "bold", width: "30%" }}>
+              Email
+            </TableCell>
+            <TableCell style={{ fontWeight: "bold", width: "30%" }}>
+              First Name
+            </TableCell>
+            <TableCell style={{ fontWeight: "bold", width: "30%" }}>
+              Last Name
+            </TableCell>
+            <TableCell
+              style={{ fontWeight: "bold", width: "10%" }}
+              align="right"
+            >
+              Remove
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -68,11 +113,33 @@ export default function EmployeesList() {
             <TableRow key={`${emp.Email}-${index}`}>
               <TableCell>{emp.Email}</TableCell>
               <TableCell>{emp.FirstName}</TableCell>
-              <TableCell align="right">{emp.LastName}</TableCell>
+              <TableCell>{emp.LastName}</TableCell>
+              <TableCell align="right">
+                <Button
+                  style={{ color: "#D6A556" }}
+                  onClick={() => handleDeleteEmployee(emp.Email)}
+                >
+                  <PersonRemoveIcon></PersonRemoveIcon>
+                </Button>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={5000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {error}
+        </Alert>
+      </Snackbar>
     </React.Fragment>
   );
 }
