@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import Storage from "./pages/Storage";
 import Orders from "./pages/Orders";
 import Employees from "./pages/Employees";
+import Customers from "./pages/Customers";
 import Reports from "./pages/Reports";
 import Suppliers from "./pages/Suppliers";
 import CustomersDashboard from "./pages/CustomersDashboard";
@@ -29,6 +30,7 @@ function App() { // paths to each page
               <Route path="/storage" element={<Storage />} />
               <Route path="/orders" element={<Orders />} />
               <Route path="/employees" element={<Employees />} />
+              <Route path="/customers" element={<Customers />} />
               <Route path="/reports" element={<Reports />} />
               <Route path="/suppliers" element={<Suppliers />} />
               <Route path="/homepage" element={<CustomersDashboard />} />

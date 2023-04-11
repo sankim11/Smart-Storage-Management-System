@@ -10,6 +10,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import LayersIcon from '@mui/icons-material/Layers';
 import WarehouseIcon from '@mui/icons-material/Warehouse';
+import GroupsIcon from '@mui/icons-material/Groups';
 import { Link } from 'react-router-dom';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
@@ -95,6 +96,14 @@ export default function SideDrawer({ open, closeDrawer }) {
         <PeopleIcon />
       </ListItemIcon>
       <ListItemText primary="Employees" />
+    </ListItemButton>
+    </Link>
+    <Link to={"/customers"} style={{ color: 'inherit', textDecoration: 'none' }}>
+    <ListItemButton>
+      <ListItemIcon>
+        <GroupsIcon />
+      </ListItemIcon>
+      <ListItemText primary="Customers" />
     </ListItemButton>
     </Link>
     <Link to={"/reports"} style={{ color: 'inherit', textDecoration: 'none' }}>

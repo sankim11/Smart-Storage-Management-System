@@ -314,7 +314,6 @@ app.get("/todo", (req, res) => {
     FROM mainstorage 
     LEFT JOIN Item ON mainstorage.ItemID = Item.ItemID
     WHERE mainstorage.AmountStored <= ?`;
-
   db.query(query, [15], (err, data) => {
     if (err) return res.json(err);
     return res.json(data);
@@ -330,6 +329,47 @@ app.delete("/employees/delete/:email", (req, res) => {
       res.status(500).send(err);
     } else {
       res.status(200).send(`Employee with email ${email} deleted successfully`);
+    }
+  });
+});
+
+// Update the price of an item in the storage
+app.put('/storage/price/:item_id', (req, res) => {
+  const itemId = req.params.item_id;
+  const { price } = req.body;
+  const q = 'UPDATE mainstorage JOIN item ON mainstorage.ItemID = item.ItemID SET item.Price = ? WHERE mainstorage.ItemID = ?';
+
+  db.query(q, [price, itemId], (err, data) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(200).send('Item price updated successfully');
+    }
+  });
+});
+
+// Update the expiry date of an item in the main storage
+app.put("/storage/expiry/:item_id", (req, res) => {
+  const item_id = req.params.item_id;
+  const new_expiry = req.body.expiry;
+  const q = `
+    UPDATE edible
+    SET expiry = ?
+    WHERE ItemID = ?;`;
+  db.query(q, [new_expiry, item_id], (err, data) => {
+    if (err) return res.status(500).send(err);
+    res.status(201).send("Expiry date updated successfully");
+  });
+});
+
+// Delete an item from the storage
+app.delete("/storage/:item_id", (req, res) => {
+  const itemID = req.params.item_id;
+  db.query("DELETE FROM mainstorage WHERE ItemID = ?", [itemID], (err, results) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.status(200).send(`Item with ID ${itemID} deleted successfully`);
     }
   });
 });

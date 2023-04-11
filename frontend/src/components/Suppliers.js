@@ -88,10 +88,7 @@ export default function SupplierList() {
     for (const item of itemsToUpdate) {
       if (item.amount_purchased > 0) {
         try {
-          const response = await axios.put(
-            `http://localhost:4000/storage/purchase/${item.item_id}/${item.amount_purchased}`
-          );
-          console.log(response.data);
+          await axios.put(`http://localhost:4000/storage/purchase/${item.item_id}/${item.amount_purchased}`);
         } catch (error) {
           console.error(error);
         }
@@ -152,70 +149,79 @@ export default function SupplierList() {
           },
         }}
       />
-      <TableContainer
-        component={Paper}
-        sx={{ maxWidth: "100%", overflowX: "auto" }}
-      >
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell style={{ fontWeight: "bold" }}>Supplier ID</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>
-                Supplier Name
-              </TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Location</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>
-                Transportation Cost
-              </TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Item ID</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Item Name</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Price</TableCell>
-              <TableCell style={{ fontWeight: "bold" }}>Quantity</TableCell>
-              <TableCell style={{ fontWeight: "bold" }} align="right">
-                Total
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredSuppliers.map((supplier, index) => (
-              <TableRow key={`${supplier.SupplierID}-${index}`}>
-                <TableCell>{supplier.SupplierID}</TableCell>
-                <TableCell>{supplier.SupplierName}</TableCell>
-                <TableCell>{supplier.Location}</TableCell>
-                <TableCell>${supplier.TransportationCost}</TableCell>
-                <TableCell>{supplier.ItemID}</TableCell>
-                <TableCell>{supplier.ItemName}</TableCell>
-                <TableCell>${supplier.Price}</TableCell>
-                <TableCell>
-                  {/* Display a select box for user to choose quantity */}
-                  <Select
-                    value={quantities[supplier.originalIndex] || 0}
-                    onChange={(e) =>
-                      handleQuantityChange(e, supplier.originalIndex, supplier)
-                    }
-                    MenuProps={{
-                      PaperProps: {
-                        style: {
-                          maxHeight: 200,
-                          overflowY: "auto",
-                        },
-                      },
-                    }}
-                  >
-                    {[...Array(51).keys()].map((_, index) => (
-                      <MenuItem key={index} value={index}>
-                        {index}
-                      </MenuItem>
-                    ))}
-                  </Select>
+      <div style={{ display: "flex" }}>
+        <TableContainer
+          component={Paper}
+          sx={{ maxWidth: "100%", overflowX: "auto" }}
+        >
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell style={{ fontWeight: "bold" }}>
+                  Supplier ID
                 </TableCell>
-                <TableCell align="right">
-                  ${(quantities[supplier.originalIndex] || 0) * supplier.Price}
+                <TableCell style={{ fontWeight: "bold" }}>
+                  Supplier Name
+                </TableCell>
+                <TableCell style={{ fontWeight: "bold" }}>Location</TableCell>
+                <TableCell style={{ fontWeight: "bold" }}>
+                  Transportation Cost
+                </TableCell>
+                <TableCell style={{ fontWeight: "bold" }}>Item ID</TableCell>
+                <TableCell style={{ fontWeight: "bold" }}>Item Name</TableCell>
+                <TableCell style={{ fontWeight: "bold" }}>Price</TableCell>
+                <TableCell style={{ fontWeight: "bold" }}>Quantity</TableCell>
+                <TableCell style={{ fontWeight: "bold" }} align="right">
+                  Total
                 </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHead>
+            <TableBody>
+              {filteredSuppliers.map((supplier, index) => (
+                <TableRow key={`${supplier.SupplierID}-${index}`}>
+                  <TableCell>{supplier.SupplierID}</TableCell>
+                  <TableCell>{supplier.SupplierName}</TableCell>
+                  <TableCell>{supplier.Location}</TableCell>
+                  <TableCell>${supplier.TransportationCost}</TableCell>
+                  <TableCell>{supplier.ItemID}</TableCell>
+                  <TableCell>{supplier.ItemName}</TableCell>
+                  <TableCell>${supplier.Price}</TableCell>
+                  <TableCell>
+                    {/* Display a select box for user to choose quantity */}
+                    <Select
+                      value={quantities[supplier.originalIndex] || 0}
+                      onChange={(e) =>
+                        handleQuantityChange(
+                          e,
+                          supplier.originalIndex,
+                          supplier
+                        )
+                      }
+                      MenuProps={{
+                        PaperProps: {
+                          style: {
+                            maxHeight: 200,
+                            overflowY: "auto",
+                          },
+                        },
+                      }}
+                    >
+                      {[...Array(51).keys()].map((_, index) => (
+                        <MenuItem key={index} value={index}>
+                          {index}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </TableCell>
+                  <TableCell align="right">
+                    $
+                    {(quantities[supplier.originalIndex] || 0) * supplier.Price}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
         <div
           style={{
             display: "flex",
@@ -236,7 +242,7 @@ export default function SupplierList() {
             Buy
           </Button>
         </div>
-      </TableContainer>
+      </div>
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={5000}

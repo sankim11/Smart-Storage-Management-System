@@ -1,5 +1,8 @@
 # Smart Storage Management System
 
+Run on Windows
+Node.js should be installed
+
 # To Set Up Database
 1. `open database folder`
 2. `copy and paste the 'Query to create database and tables' in MySQL Workbench and execute`
