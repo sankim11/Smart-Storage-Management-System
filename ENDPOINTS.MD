@@ -1,72 +1,10 @@
 # Functions Documentation
 
-## 1. Create Auth Function
+## Function Summary
 
-### Function Name
+| Function Name | Access Level | Operation Type | Input Validator               | Description                                                      |
+|---------------|--------------|----------------|-------------------------------|------------------------------------------------------------------|
+| create        | Public       | Mutation       | authNotionValidator.createAuth| Creates authentication using the provided input. Calls `authNotionService.createAuth` with the validated input. |
+| get           | Public       | Query          | authNotionValidator.get       | Retrieves a Notion client. Validates input and calls `authNotionService.getNotionClient`.                              |
+| getDocument   | Public       | Query          | authNotionValidator.getDocument| Retrieves a document by IDs. Validates `notion_id` and `document_id`, then calls `authNotionService.getDocumentById`. |
 
-- `create`
-
-### Access Level
-
-- Public
-
-### Operation Type
-
-- Mutation
-
-### Input
-
-- Uses `authNotionValidator.createAuth` for input validation.
-
-### Description
-
-- This function is responsible for creating authentication. It takes the input, validates it using `authNotionValidator.createAuth`, and then calls the `authNotionService.createAuth` method with the validated input. It returns the result of this service call.
-
----
-
-## 2. Get Notion Client Function
-
-### Function Name
-
-- `get`
-
-### Access Level
-
-- Public
-
-### Operation Type
-
-- Query
-
-### Input
-
-- Uses `authNotionValidator.get` for input validation.
-
-### Description
-
-- This function is used to retrieve a Notion client. It validates the input with `authNotionValidator.get` and then calls the `authNotionService.getNotionClient` method with the validated input. The result of this service method is returned.
-
----
-
-## 3. Get Document Function
-
-### Function Name
-
-- `getDocument`
-
-### Access Level
-
-- Public
-
-### Operation Type
-
-- Query
-
-### Input
-
-- Uses `authNotionValidator.getDocument` for input validation.
-- Requires `notion_id` and `document_id`.
-
-### Description
-
-- This function retrieves a specific document by its ID. It takes an input object containing `notion_id` and `document_id`, validates this input using `authNotionValidator.getDocument`, and then calls `authNotionService.getDocumentById` with the notion ID and document ID. The function returns the document corresponding to the provided IDs.
